@@ -4,7 +4,8 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from "react-native";
 
 type Props = {
@@ -21,19 +22,17 @@ export default function LoginScreen({ onLogin }: Props) {
       </View>
 
       <Text style={styles.title}>MathOff</Text>
-      <Text style={styles.subtitle}>
-        Precision logic, digital speed.
-      </Text>
+      <Text style={styles.subtitle}></Text>
 
       {/* Inputs */}
       <TextInput
-        placeholder="Email"
+        placeholder="Correo"
         placeholderTextColor="#7aa"
         style={styles.input}
       />
 
       <TextInput
-        placeholder="Password"
+        placeholder="Contraseña"
         placeholderTextColor="#7aa"
         secureTextEntry
         style={styles.input}
@@ -41,16 +40,16 @@ export default function LoginScreen({ onLogin }: Props) {
 
       {/* Forgot */}
       <TouchableOpacity>
-        <Text style={styles.forgot}>Forgot?</Text>
+        <Text style={styles.forgot}>Olvidaste la contraseña??</Text>
       </TouchableOpacity>
 
       {/* Button */}
       <TouchableOpacity style={styles.button} onPress={onLogin}>
-        <Text style={styles.buttonText}>LOG IN</Text>
+        <Text style={styles.buttonText}>INICIAR</Text>
       </TouchableOpacity>
 
       {/* Divider */}
-      <Text style={styles.or}>OR CONNECT WITH</Text>
+      <Text style={styles.or}>O ingresa con</Text>
 
       {/* Social */}
       <View style={styles.socialRow}>
@@ -65,8 +64,8 @@ export default function LoginScreen({ onLogin }: Props) {
 
       {/* Footer */}
       <Text style={styles.footer}>
-        New to the laboratory?{" "}
-        <Text style={styles.link}>Create an account</Text>
+        No tienes cuenta?{" "}
+        <Text style={styles.link}>Crear cuenta</Text>
       </Text>
 
     </View>

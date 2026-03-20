@@ -7,6 +7,6 @@ export default function MainNavigator() {
   const [isLogged, setIsLogged] = useState(false);
 
   return isLogged
-    ? <BottomTabs />
+    ? <BottomTabs onLogout={() => setIsLogged(false)} />
     : <LoginScreen onLogin={() => setIsLogged(true)} />;
 }
