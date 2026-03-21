@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import logo from "../../assets/logo.png";
+import { Ionicons } from "@expo/vector-icons";
+
 import {
   View,
   Text,
@@ -13,34 +16,49 @@ type Props = {
 };
 
 export default function LoginScreen({ onLogin }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <View style={styles.container}>
 
       {/* Logo */}
       <View style={styles.logoBox}>
-        <Text style={styles.logo}>Σ</Text>
+        <Image source={logo} style={styles.logoImage} />
       </View>
 
       <Text style={styles.title}>MathOff</Text>
       <Text style={styles.subtitle}></Text>
 
       {/* Inputs */}
+      <View style={styles.inputContainer}>
+      <Ionicons name="mail-outline" size={18} color="#7aa" />
       <TextInput
         placeholder="Correo"
         placeholderTextColor="#7aa"
         style={styles.input}
       />
+      </View>
 
-      <TextInput
-        placeholder="Contraseña"
-        placeholderTextColor="#7aa"
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.inputContainer}>
+  <Ionicons name="lock-closed-outline" size={18} color="#7aa" />
 
+  <TextInput
+    placeholder="Contraseña"
+    placeholderTextColor="#7aa"
+    secureTextEntry={!showPassword}
+    style={styles.input}
+  />
+
+  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+    <Ionicons
+      name={showPassword ? "eye-off-outline" : "eye-outline"}
+      size={18}
+      color="#7aa"
+    />
+  </TouchableOpacity>
+</View>
       {/* Forgot */}
       <TouchableOpacity>
-        <Text style={styles.forgot}>Olvidaste la contraseña??</Text>
+        <Text style={styles.forgot}>Olvido la contraseña?</Text>
       </TouchableOpacity>
 
       {/* Button */}
@@ -49,23 +67,25 @@ export default function LoginScreen({ onLogin }: Props) {
       </TouchableOpacity>
 
       {/* Divider */}
-      <Text style={styles.or}>O ingresa con</Text>
+      <Text style={styles.or}>Ingresar con</Text>
 
       {/* Social */}
       <View style={styles.socialRow}>
         <View style={styles.socialBtn}>
-          <Text style={{ color: "#fff" }}>Google</Text>
+          <Ionicons name="logo-google" size={18} color="#fff" />
+          <Text style={styles.socialText}>Google</Text>
         </View>
 
         <View style={styles.socialBtn}>
-          <Text style={{ color: "#fff" }}>Apple</Text>
+          <Ionicons name="logo-apple" size={18} color="#fff" />
+          <Text style={styles.socialText}>Apple</Text>
         </View>
       </View>
 
       {/* Footer */}
       <Text style={styles.footer}>
         No tienes cuenta?{" "}
-        <Text style={styles.link}>Crear cuenta</Text>
+        <Text style={styles.link}>Registrarse</Text>
       </Text>
 
     </View>
@@ -80,6 +100,15 @@ const styles = StyleSheet.create({
     padding: 25,
     justifyContent: "center"
   },
+
+  inputContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  backgroundColor: "#0D2A36",
+  borderRadius: 12,
+  paddingHorizontal: 12,
+  marginBottom: 15
+},
 
   logoBox: {
     width: 70,
@@ -96,6 +125,11 @@ const styles = StyleSheet.create({
     color: "#00C2FF",
     fontSize: 30
   },
+  logoImage: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain"
+  },
 
   title: {
     color: "#E8F6FF",
@@ -110,12 +144,11 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: "#0D2A36",
-    padding: 15,
-    borderRadius: 12,
-    color: "#fff",
-    marginBottom: 15
-  },
+  flex: 1,
+  color: "#fff",
+  paddingVertical: 15,
+  marginLeft: 10
+},
 
   forgot: {
     color: "#00C2FF",
@@ -147,12 +180,18 @@ const styles = StyleSheet.create({
   },
 
   socialBtn: {
-    backgroundColor: "#0D2A36",
-    padding: 15,
-    borderRadius: 12,
-    width: "48%",
-    alignItems: "center"
-  },
+  backgroundColor: "#0D2A36",
+  padding: 15,
+  borderRadius: 12,
+  width: "48%",
+  alignItems: "center",
+  flexDirection: "row",
+  justifyContent: "center",
+  gap: 8
+},
+socialText: {
+  color: "#fff"
+},
 
   footer: {
     color: "#7aa",

@@ -8,7 +8,7 @@ return(
 
 <View style={styles.container}>
 
-<Text style={styles.title}>Scan Equation</Text>
+<Text style={styles.title}>Escanear Ecuaciones</Text>
 
 <CameraView style={styles.camera}/>
 

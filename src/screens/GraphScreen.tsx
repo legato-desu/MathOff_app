@@ -11,11 +11,11 @@ return(
 
 <View style={styles.container}>
 
-<Text style={styles.title}>MathOff</Text>
+<Text style={styles.title}>Graficador</Text>
 
 <TextInput
 style={styles.input}
-placeholder="f(x) = x²"
+placeholder="f(x) = 1-x²"
 placeholderTextColor="#888"
 />
 

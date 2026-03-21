@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Switch
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 type Props = {
   onLogout: () => void;
@@ -16,21 +17,32 @@ export default function SettingsScreen({ onLogout }: Props) {
   const [darkMode, setDarkMode] = useState(true);
   const [notifications, setNotifications] = useState(false);
 
+  const ItemRow = ({ icon, label }: any) => (
+    <View style={styles.row}>
+      <View style={styles.rowLeft}>
+        <Ionicons name={icon} size={18} color="#00C2FF" />
+        <Text style={styles.item}>{label}</Text>
+      </View>
+
+      <Ionicons name="chevron-forward" size={18} color="#7aa" />
+    </View>
+  );
+
   return (
     <View style={styles.container}>
 
       {/* HEADER */}
       <Text style={styles.header}>Opciones</Text>
 
-      {/* PROFILE CARD */}
+      {/* PROFILE */}
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
           <Text style={{ color: "#00C2FF", fontSize: 22 }}>Σ</Text>
         </View>
 
         <View>
-          <Text style={styles.name}>Andres David</Text>
-          <Text style={styles.plan}>Miembro Premium</Text>
+          <Text style={styles.name}>Andres Miranda</Text>
+          <Text style={styles.plan}>Usuario Premium</Text>
         </View>
       </View>
 
@@ -38,8 +50,8 @@ export default function SettingsScreen({ onLogout }: Props) {
       <Text style={styles.section}>CUENTA</Text>
 
       <View style={styles.card}>
-        <Text style={styles.item}>Correo electronico</Text>
-        <Text style={styles.item}>Contraseña</Text>
+        <ItemRow icon="mail-outline" label="Correo electronico" />
+        <ItemRow icon="lock-closed-outline" label="Cambiar contraseña" />
       </View>
 
       {/* PREFERENCES */}
@@ -48,7 +60,11 @@ export default function SettingsScreen({ onLogout }: Props) {
       <View style={styles.card}>
 
         <View style={styles.row}>
-          <Text style={styles.item}>Modo oscuro</Text>
+          <View style={styles.rowLeft}>
+            <Ionicons name="moon-outline" size={18} color="#00C2FF" />
+            <Text style={styles.item}>Modo oscuro</Text>
+          </View>
+
           <Switch
             value={darkMode}
             onValueChange={setDarkMode}
@@ -57,12 +73,20 @@ export default function SettingsScreen({ onLogout }: Props) {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.item}>Idioma</Text>
+          <View style={styles.rowLeft}>
+            <Ionicons name="language-outline" size={18} color="#00C2FF" />
+            <Text style={styles.item}>Idioma</Text>
+          </View>
+
           <Text style={styles.value}>Español</Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.item}>Notificaciones</Text>
+          <View style={styles.rowLeft}>
+            <Ionicons name="notifications-outline" size={18} color="#00C2FF" />
+            <Text style={styles.item}>Notificaciones</Text>
+          </View>
+
           <Switch
             value={notifications}
             onValueChange={setNotifications}
@@ -76,8 +100,8 @@ export default function SettingsScreen({ onLogout }: Props) {
       <Text style={styles.section}>SOPORTE</Text>
 
       <View style={styles.card}>
-        <Text style={styles.item}>Centro de ayuda</Text>
-        <Text style={styles.item}>Politica de privacidad</Text>
+        <ItemRow icon="help-circle-outline" label="Centro de ayuda" />
+        <ItemRow icon="shield-checkmark-outline" label="Politica de privacidad" />
       </View>
 
       {/* LOGOUT */}
@@ -146,16 +170,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D2A36",
     borderRadius: 15,
     padding: 15,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
+    marginBottom: 20
   },
 
   item: {
     color: "#E8F6FF",
-    paddingVertical: 8
+    marginLeft: 10
   },
 
   value: {
@@ -165,6 +185,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10
+  },
+
+  rowLeft: {
+    flexDirection: "row",
     alignItems: "center"
   },
 
