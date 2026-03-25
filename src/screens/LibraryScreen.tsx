@@ -8,11 +8,12 @@ return(
 
 <View style={styles.container}>
 
-<Text style={styles.title}>Library</Text>
+<Text style={styles.title}>Libreria</Text>
 
 <View style={styles.row}>
-<SavedGraphCard title="y = x² + 2x + 1"/>
+<SavedGraphCard title="y = 1 - x²"/>
 <SavedGraphCard title="y = sin(x)"/>
+
 </View>
 
 </View>

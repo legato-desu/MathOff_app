@@ -1,60 +1,60 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+
+import { styles } from "../styles/mathKeyboard.styles";
+
+type Props = {
+  onInput: (value: string) => void;
+  onDelete: () => void;
+  onClear: () => void;
+};
 
 const keys = [
-["sin","cos","tan","π","√"],
-["x","7","8","9","+"],
-["y","4","5","6","x"],
-["^","1","2","3","-"],
-["("," )","0",".","="]
+  ["C","⌫",],
+  ["sin","cos","tan","π","√"],
+  ["x","7","8","9","+"],
+  ["y","4","5","6","*"],
+  ["^","1","2","3","-"],
+  ["("," )","0",".","="]
 ];
 
-export default function MathKeyboard(){
+export default function MathKeyboard({ onInput, onDelete, onClear }: Props) {
 
-return(
+  const getKeyStyle = (key: string) => {
+    if (key === "C") return [styles.key, styles.keyClear];
+    if (key === "⌫") return [styles.key, styles.keyDelete];
+    if (key === "=") return [styles.key, styles.keyEqual];
+    return styles.key;
+  };
 
-<View style={styles.container}>
+  const getTextStyle = (key: string) => {
+    if (key === "=") return [styles.text, styles.textDark];
+    return styles.text;
+  };
 
-{keys.map((row,i)=>(
-<View key={i} style={styles.row}>
+  return (
+    <View style={styles.container}>
 
-{row.map((k)=>(
-<TouchableOpacity key={k} style={styles.key}>
-<Text style={styles.text}>{k}</Text>
-</TouchableOpacity>
-))}
+      {keys.map((row, i) => (
+        <View key={i} style={styles.row}>
 
-</View>
-))}
+          {row.map((k) => (
+            <TouchableOpacity
+              key={k}
+              style={getKeyStyle(k)}
+              onPress={() => {
+                if (k === "⌫") return onDelete();
+                if (k === "C") return onClear();
+                onInput(k);
+              }}
+            >
+              <Text style={getTextStyle(k)}>{k}</Text>
+            </TouchableOpacity>
+          ))}
 
-</View>
+        </View>
+      ))}
 
-)
-
+    </View>
+  );
 }
-
-const styles = StyleSheet.create({
-
-container:{
-marginTop:20
-},
-
-row:{
-flexDirection:"row",
-justifyContent:"space-between",
-marginBottom:10
-},
-
-key:{
-backgroundColor:"#123847",
-padding:15,
-borderRadius:10,
-width:"18%",
-alignItems:"center"
-},
-
-text:{
-color:"#E8F6FF"
-}
-
-})

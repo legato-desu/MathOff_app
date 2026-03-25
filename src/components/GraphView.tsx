@@ -1,30 +1,191 @@
-import React from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { View } from "react-native";
-import Svg, { Path, Line } from "react-native-svg";
+import Svg, { Path, Line, Text as SvgText } from "react-native-svg";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
-export default function GraphView(){
+import { styles } from "../styles/graphView.styles";
+import { colors } from "../theme/colors";
 
-return(
+type FnType = {
+  fn: (x: number) => number;
+  color: string;
+};
 
-<View style={{height:220}}>
+type Props = {
+  fns: FnType[];
+};
 
-<Svg height="220" width="100%">
+export default function GraphView({ fns }: Props) {
 
-<Line x1="0" y1="110" x2="400" y2="110" stroke="#2f4c59"/>
+  const width = 400;
+  const height = 220;
 
-<Line x1="200" y1="0" x2="200" y2="220" stroke="#2f4c59"/>
+  const [scale, setScale] = useState(20);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-<Path
-d="M0 180 Q200 20 400 180"
-stroke="#00C2FF"
-strokeWidth="3"
-fill="none"
-/>
+  const scaleRef = useRef(20);
+  const offsetRef = useRef({ x: 0, y: 0 });
 
-</Svg>
+  const centerX = width / 2 + offset.x;
+  const centerY = height / 2 + offset.y;
 
-</View>
+  // 🔍 PINCH ZOOM
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      let newScale = scaleRef.current * e.scale;
+      newScale = Math.max(5, Math.min(100, newScale));
+      setScale(newScale);
+    })
+    .onEnd(() => {
+      scaleRef.current = scale;
+    });
 
-)
+  // ✋ PAN (mover gráfica)
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      const newOffset = {
+        x: offsetRef.current.x + e.translationX,
+        y: offsetRef.current.y + e.translationY,
+      };
+      setOffset(newOffset);
+    })
+    .onEnd(() => {
+      offsetRef.current = offset;
+    });
 
+  // 🔗 SOLO pinch + pan (ESTABLE)
+  const gesture = Gesture.Simultaneous(
+    pinchGesture,
+    panGesture
+  );
+
+  // 📈 GENERAR PATHS
+  const paths = useMemo(() => {
+    return fns.map(({ fn, color }) => {
+
+      let path = "";
+      let first = true;
+
+      for (let px = 0; px < width; px++) {
+        const x = (px - centerX) / scale;
+
+        let y;
+        try {
+          y = fn(x);
+        } catch {
+          continue;
+        }
+
+        if (typeof y !== "number" || isNaN(y)) continue;
+
+        const py = centerY - y * scale;
+
+        if (first) {
+          path += `M ${px} ${py}`;
+          first = false;
+        } else {
+          path += ` L ${px} ${py}`;
+        }
+      }
+
+      return { path, color };
+    });
+
+  }, [fns, scale, offset]);
+
+  // GRID
+  const drawGrid = () => {
+    const lines = [];
+    const step = scale;
+
+    for (let x = centerX % step; x < width; x += step) {
+      lines.push(
+        <Line key={`v-${x}`} x1={x} y1="0" x2={x} y2={height} stroke={colors.border} strokeWidth="0.5" />
+      );
+    }
+
+    for (let y = centerY % step; y < height; y += step) {
+      lines.push(
+        <Line key={`h-${y}`} x1="0" y1={y} x2={width} y2={y} stroke={colors.border} strokeWidth="0.5" />
+      );
+    }
+
+    return lines;
+  };
+
+  // 🔢 LABELS
+  const drawAxisLabels = () => {
+    const labels = [];
+
+    let step = scale;
+    if (scale < 15) step = scale * 2;
+    if (scale < 10) step = scale * 4;
+
+    // X
+    for (let px = centerX % step; px < width; px += step) {
+      const value = (px - centerX) / scale;
+      if (Math.abs(value) < 0.001) continue;
+
+      labels.push(
+        <SvgText
+          key={`x-${px}`}
+          x={px}
+          y={centerY + 15}
+          fontSize="10"
+          fill="white"
+          textAnchor="middle"
+        >
+          {scale > 30 ? value.toFixed(1) : Math.round(value)}
+        </SvgText>
+      );
+    }
+
+    // Y
+    for (let py = centerY % step; py < height; py += step) {
+      const value = (centerY - py) / scale;
+      if (Math.abs(value) < 0.001) continue;
+
+      labels.push(
+        <SvgText
+          key={`y-${py}`}
+          x={centerX + 5}
+          y={py}
+          fontSize="10"
+          fill="white"
+        >
+          {scale > 30 ? value.toFixed(1) : Math.round(value)}
+        </SvgText>
+      );
+    }
+
+    return labels;
+  };
+
+  return (
+      <View style={styles.container}>
+
+        <Svg height={height} width={width}>
+
+          {drawGrid()}
+          {drawAxisLabels()}
+
+          {/* ejes */}
+          <Line x1="0" y1={centerY} x2={width} y2={centerY} stroke={colors.textSecondary} />
+          <Line x1={centerX} y1="0" x2={centerX} y2={height} stroke={colors.textSecondary} />
+
+          {/* funciones */}
+          {paths.map((p, i) => (
+            <Path
+              key={i}
+              d={p.path}
+              stroke={p.color}
+              strokeWidth="2"
+              fill="none"
+            />
+          ))}
+
+        </Svg>
+
+      </View>
+  );
 }

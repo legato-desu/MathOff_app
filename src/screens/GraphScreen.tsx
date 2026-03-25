@@ -1,54 +1,163 @@
-import React from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput } from "react-native";
 
 import GraphView from "../components/GraphView";
 import MathKeyboard from "../components/MathKeyboard";
+
+import { styles } from "../styles/graph.styles";
 import { colors } from "../theme/colors";
 
-export default function GraphScreen(){
+import { evaluateExpression } from "../utils/math.utils";
+import { ScrollView } from "react-native";
 
-return(
+export default function GraphScreen() {
 
-<View style={styles.container}>
+  const [expression, setExpression] = useState("");
+  const [functions, setFunctions] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-<Text style={styles.title}>MathOff</Text>
+ 
+  const getRandomColor = () => {
+  const palette = [
+    "#00C2FF",
+    "#FF6B6B",
+    "#FFD93D",
+    "#6BCB77",
+    "#A66CFF",
+    "#FF9F1C",
+    "#2EC4B6",
+    "#E71D36",
+    "#8338EC",
+    "#3A86FF"
+  ];
 
-<TextInput
-style={styles.input}
-placeholder="f(x) = x²"
-placeholderTextColor="#888"
-/>
+  return palette[Math.floor(Math.random() * palette.length)];
+};
 
-<GraphView/>
+  const handleInput = (value: string) => {
 
-<MathKeyboard/>
+    if (value === "=") {
+      const result = evaluateExpression(expression);
 
-</View>
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
 
-)
+      const newFn = {
+  fn: result.fn!,
+  color: getRandomColor(),
+  expr: expression,
+  active: true // 👈 clave
+};
 
+      setFunctions((prev) => [newFn, ...prev]);
+      setExpression("");
+      setError(null);
+      return;
+    }
+
+    setExpression((prev) => prev + value);
+  };
+
+  const handleDelete = () => {
+    setExpression((prev) => prev.slice(0, -1));
+  };
+
+  const handleClear = () => {
+    setExpression("");
+    setError(null);
+  };
+
+  const removeFunction = (index: number) => {
+  setFunctions((prev) => prev.filter((_, i) => i !== index));
+};
+
+const toggleFunction = (index: number) => {
+  setFunctions((prev) =>
+    prev.map((f, i) =>
+      i === index ? { ...f, active: !f.active } : f
+    )
+  );
+};
+
+  return (
+    <View style={styles.container}>
+
+      <Text style={styles.title}>Graficador</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="f(x) = ..."
+        placeholderTextColor={colors.textMuted}
+        value={expression}
+        onChangeText={setExpression}
+      />
+
+      {error && <Text style={styles.errorText}>{error}</Text>}
+
+      {/* 🔥 MULTIPLES FUNCIONES */}
+<GraphView fns={functions.filter(f => f.active)} />
+
+
+
+      {/* lista */}
+      <ScrollView
+  style={{ maxHeight: 100, marginTop: 10 }}
+  showsVerticalScrollIndicator={false}
+>
+  {functions.map((f, i) => (
+    <View
+      key={i}
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: colors.card,
+        padding: 10,
+        borderRadius: 10,
+        marginBottom: 6,
+        opacity: f.active ? 1 : 0.4
+      }}
+    >
+      <Text
+        style={{ color: f.color, flex: 1 }}
+        onPress={() => toggleFunction(i)}
+      >
+        {f.expr}
+      </Text>
+
+      <Text
+        style={{
+          color: f.active ? "#00FFAA" : colors.textMuted,
+          fontWeight: "bold",
+          marginRight: 10
+        }}
+        onPress={() => toggleFunction(i)}
+      >
+        {f.active ? "ON" : "OFF"}
+      </Text>
+
+      <Text
+        style={{
+          color: colors.error,
+          fontWeight: "bold",
+          fontSize: 16
+        }}
+        onPress={() => removeFunction(i)}
+      >
+        ✕
+      </Text>
+    </View>
+  ))}
+</ScrollView>
+
+      <MathKeyboard
+        onInput={handleInput}
+        onDelete={handleDelete}
+        onClear={handleClear}
+      />
+
+    </View>
+  );
 }
-
-const styles = StyleSheet.create({
-
-container:{
-flex:1,
-backgroundColor:colors.background,
-padding:20
-},
-
-title:{
-color:colors.text,
-fontSize:22,
-marginBottom:10
-},
-
-input:{
-backgroundColor:colors.card,
-padding:15,
-borderRadius:10,
-color:"white",
-marginBottom:10
-}
-
-})
