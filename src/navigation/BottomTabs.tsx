@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 
+import { useTheme } from "../theme/ThemeContext";
+
 import GraphScreen from "../screens/GraphScreen";
 import ScanScreen from "../screens/ScanScreen";
 import LibraryScreen from "../screens/LibraryScreen";
@@ -12,19 +14,21 @@ const Tab = createBottomTabNavigator();
 
 export default function BottomTabs({ onLogout }: any) {
 
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
 
         tabBarStyle: {
-          backgroundColor: "#0D2A36",
+          backgroundColor: colors.card,
           borderTopWidth: 0,
           height: 70
         },
 
-        tabBarActiveTintColor: "#00C2FF",
-        tabBarInactiveTintColor: "#7aa",
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
 
         tabBarIcon: ({ color, size, focused }) => {
           let iconName: any;
@@ -45,25 +49,27 @@ export default function BottomTabs({ onLogout }: any) {
     >
 
       <Tab.Screen name="Grafico" component={GraphScreen} />
+
       <Tab.Screen 
-      name="Escaner" 
-      component={ScanScreen} 
-      options={{
-        tabBarIcon: ({ focused }) => (
-          <View style= {{
-            backgroundColor: "#00c2ff",
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: 30
-          }} >
-            <Ionicons name="scan" size={28} color={"#071A24"}/>
-          </View>
-        )
+        name="Escaner" 
+        component={ScanScreen} 
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{
+              backgroundColor: colors.primary,
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 30
+            }}>
+              <Ionicons name="scan" size={28} color={colors.background}/>
+            </View>
+          )
         }}
-          />
+      />
+
       <Tab.Screen name="Libreria" component={LibraryScreen} />
 
       <Tab.Screen name="Opciones">

@@ -1,57 +1,47 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { CameraView } from "expo-camera";
+import { useTheme } from "../theme/ThemeContext";
 
 export default function ScanScreen(){
 
-return(
+  const { colors } = useTheme();
 
-<View style={styles.container}>
+  return(
+    <View style={{
+      flex:1,
+      backgroundColor: colors.background,
+      padding:20
+    }}>
 
-<Text style={styles.title}>Escanear Ecuaciones</Text>
+      <Text style={{
+        color: colors.text,
+        fontSize:20,
+        marginBottom:20
+      }}>
+        Escanear Ecuaciones
+      </Text>
 
-<CameraView style={styles.camera}/>
+      <CameraView style={{
+        height:320,
+        borderRadius:20,
+        overflow:"hidden"
+      }}/>
 
-<View style={styles.result}>
-<Text style={styles.eq}>∫ (3x² + 2x + 1) dx</Text>
-</View>
+      <View style={{
+        marginTop:20,
+        backgroundColor: colors.card,
+        padding:20,
+        borderRadius:12
+      }}>
+        <Text style={{
+          color: colors.primary,
+          fontSize:18
+        }}>
+          ∫ (3x² + 2x + 1) dx
+        </Text>
+      </View>
 
-</View>
-
-)
-
+    </View>
+  );
 }
-
-const styles = StyleSheet.create({
-
-container:{
-flex:1,
-backgroundColor:"#071A24",
-padding:20
-},
-
-title:{
-color:"#fff",
-fontSize:20,
-marginBottom:20
-},
-
-camera:{
-height:320,
-borderRadius:20,
-overflow:"hidden"
-},
-
-result:{
-marginTop:20,
-backgroundColor:"#0D2A36",
-padding:20,
-borderRadius:12
-},
-
-eq:{
-color:"#00C2FF",
-fontSize:18
-}
-
-})
