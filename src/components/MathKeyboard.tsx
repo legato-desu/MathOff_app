@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
-import { styles } from "../styles/mathKeyboard.styles";
+import { useTheme } from "../theme/ThemeContext";
+import { createStyles } from "../styles/mathKeyboard.styles";
 
 type Props = {
   onInput: (value: string) => void;
@@ -10,7 +11,7 @@ type Props = {
 };
 
 const keys = [
-  ["C","⌫",],
+  ["C","⌫"],
   ["sin","cos","tan","π","√"],
   ["x","7","8","9","+"],
   ["y","4","5","6","*"],
@@ -19,6 +20,9 @@ const keys = [
 ];
 
 export default function MathKeyboard({ onInput, onDelete, onClear }: Props) {
+
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   const getKeyStyle = (key: string) => {
     if (key === "C") return [styles.key, styles.keyClear];

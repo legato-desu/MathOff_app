@@ -10,14 +10,17 @@ import {
   Image
 } from "react-native";
 
-import { styles } from "../styles/login.styles";
-import { colors } from "../theme/colors";
+import { useTheme } from "../theme/ThemeContext";
+import { createStyles } from "../styles/login.styles";
 
 type Props = {
   onLogin: () => void;
 };
 
 export default function LoginScreen({ onLogin }: Props) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   const [showPassword, setShowPassword] = useState(false);
 
   return (

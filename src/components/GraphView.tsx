@@ -3,8 +3,8 @@ import { View } from "react-native";
 import Svg, { Path, Line, Text as SvgText } from "react-native-svg";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
+import { useTheme } from "../theme/ThemeContext";
 import { styles } from "../styles/graphView.styles";
-import { colors } from "../theme/colors";
 
 type FnType = {
   fn: (x: number) => number;
@@ -16,6 +16,8 @@ type Props = {
 };
 
 export default function GraphView({ fns }: Props) {
+
+  const { colors } = useTheme();
 
   const width = 400;
   const height = 220;
@@ -29,7 +31,6 @@ export default function GraphView({ fns }: Props) {
   const centerX = width / 2 + offset.x;
   const centerY = height / 2 + offset.y;
 
-  // 🔍 PINCH ZOOM
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
       let newScale = scaleRef.current * e.scale;
@@ -40,7 +41,6 @@ export default function GraphView({ fns }: Props) {
       scaleRef.current = scale;
     });
 
-  // ✋ PAN (mover gráfica)
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       const newOffset = {
@@ -53,13 +53,8 @@ export default function GraphView({ fns }: Props) {
       offsetRef.current = offset;
     });
 
-  // 🔗 SOLO pinch + pan (ESTABLE)
-  const gesture = Gesture.Simultaneous(
-    pinchGesture,
-    panGesture
-  );
+  const gesture = Gesture.Simultaneous(pinchGesture, panGesture);
 
-  // 📈 GENERAR PATHS
   const paths = useMemo(() => {
     return fns.map(({ fn, color }) => {
 
@@ -93,7 +88,6 @@ export default function GraphView({ fns }: Props) {
 
   }, [fns, scale, offset]);
 
-  // GRID
   const drawGrid = () => {
     const lines = [];
     const step = scale;
@@ -113,7 +107,6 @@ export default function GraphView({ fns }: Props) {
     return lines;
   };
 
-  // 🔢 LABELS
   const drawAxisLabels = () => {
     const labels = [];
 
@@ -121,7 +114,6 @@ export default function GraphView({ fns }: Props) {
     if (scale < 15) step = scale * 2;
     if (scale < 10) step = scale * 4;
 
-    // X
     for (let px = centerX % step; px < width; px += step) {
       const value = (px - centerX) / scale;
       if (Math.abs(value) < 0.001) continue;
@@ -132,7 +124,7 @@ export default function GraphView({ fns }: Props) {
           x={px}
           y={centerY + 15}
           fontSize="10"
-          fill="white"
+          fill={colors.text} // 🔥 dinámico
           textAnchor="middle"
         >
           {scale > 30 ? value.toFixed(1) : Math.round(value)}
@@ -140,7 +132,6 @@ export default function GraphView({ fns }: Props) {
       );
     }
 
-    // Y
     for (let py = centerY % step; py < height; py += step) {
       const value = (centerY - py) / scale;
       if (Math.abs(value) < 0.001) continue;
@@ -151,7 +142,7 @@ export default function GraphView({ fns }: Props) {
           x={centerX + 5}
           y={py}
           fontSize="10"
-          fill="white"
+          fill={colors.text} // 🔥 dinámico
         >
           {scale > 30 ? value.toFixed(1) : Math.round(value)}
         </SvgText>
@@ -162,18 +153,16 @@ export default function GraphView({ fns }: Props) {
   };
 
   return (
-      <View style={styles.container}>
-
+    <View style={styles.container}>
+      <GestureDetector gesture={gesture}>
         <Svg height={height} width={width}>
 
           {drawGrid()}
           {drawAxisLabels()}
 
-          {/* ejes */}
           <Line x1="0" y1={centerY} x2={width} y2={centerY} stroke={colors.textSecondary} />
           <Line x1={centerX} y1="0" x2={centerX} y2={height} stroke={colors.textSecondary} />
 
-          {/* funciones */}
           {paths.map((p, i) => (
             <Path
               key={i}
@@ -185,7 +174,7 @@ export default function GraphView({ fns }: Props) {
           ))}
 
         </Svg>
-
-      </View>
+      </GestureDetector>
+    </View>
   );
 }

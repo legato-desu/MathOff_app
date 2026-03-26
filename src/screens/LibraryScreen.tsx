@@ -1,43 +1,32 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import SavedGraphCard from "../components/SavedGraphCard";
+import { useTheme } from "../theme/ThemeContext";
 
 export default function LibraryScreen(){
 
-return(
+  const { colors } = useTheme();
 
-<View style={styles.container}>
+  return(
+    <View style={{
+      flex:1,
+      backgroundColor: colors.background,
+      padding:20
+    }}>
 
-<Text style={styles.title}>Libreria</Text>
+      <Text style={{
+        color: colors.text,
+        fontSize:24,
+        marginBottom:20
+      }}>
+        Libreria
+      </Text>
 
-<View style={styles.row}>
-<SavedGraphCard title="y = 1 - x²"/>
-<SavedGraphCard title="y = sin(x)"/>
+      <View style={{ flexDirection:"row" }}>
+        <SavedGraphCard title="y = 1 - x²"/>
+        <SavedGraphCard title="y = sin(x)"/>
+      </View>
 
-</View>
-
-</View>
-
-)
-
+    </View>
+  );
 }
-
-const styles = StyleSheet.create({
-
-container:{
-flex:1,
-backgroundColor:"#071A24",
-padding:20
-},
-
-title:{
-color:"#E8F6FF",
-fontSize:24,
-marginBottom:20
-},
-
-row:{
-flexDirection:"row"
-}
-
-})

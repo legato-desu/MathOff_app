@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { styles } from "../styles/settings.styles";
-import { colors } from "../theme/colors";
+import { useTheme } from "../theme/ThemeContext";
+import { createStyles } from "../styles/settings.styles";
 
 type Props = {
   onLogout: () => void;
@@ -16,7 +16,9 @@ type Props = {
 
 export default function SettingsScreen({ onLogout }: Props) {
 
-  const [darkMode, setDarkMode] = useState(true);
+  const { isDark, toggleTheme, colors } = useTheme();
+  const styles = createStyles(colors);
+
   const [notifications, setNotifications] = useState(false);
 
   const ItemRow = ({ icon, label }: any) => (
@@ -32,8 +34,10 @@ export default function SettingsScreen({ onLogout }: Props) {
 
   return (
     <View style={styles.container}>
-
-      <Text style={styles.header}>Opciones</Text>
+      
+      <Text style={styles.header}>
+        Opciones
+      </Text>
 
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
@@ -64,8 +68,8 @@ export default function SettingsScreen({ onLogout }: Props) {
           </View>
 
           <Switch
-            value={darkMode}
-            onValueChange={setDarkMode}
+            value={isDark}
+            onValueChange={toggleTheme}
             trackColor={{ true: colors.primary, false: colors.border }}
           />
         </View>
