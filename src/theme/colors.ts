@@ -23,7 +23,7 @@ export const darkColors = {
 
 export const lightColors = {
   background: "#FFFFFF",
-  card: "#F5F5F5",
+  card: "#F5F5F5", 
   surface: "#EAEAEA",
 
   primary: "#007AFF",
