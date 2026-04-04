@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/settings.styles";
+import { useAuthStore } from "../store/authStore";
 
 type Props = {
   onLogout: () => void;
@@ -18,6 +19,8 @@ export default function SettingsScreen({ onLogout }: Props) {
 
   const { isDark, toggleTheme, colors } = useTheme();
   const styles = createStyles(colors);
+
+  const { logout } = useAuthStore();
 
   const [notifications, setNotifications] = useState(false);
 
@@ -35,9 +38,7 @@ export default function SettingsScreen({ onLogout }: Props) {
   return (
     <View style={styles.container}>
       
-      <Text style={styles.header}>
-        Opciones
-      </Text>
+      <Text style={styles.header}>Opciones</Text>
 
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
@@ -45,8 +46,8 @@ export default function SettingsScreen({ onLogout }: Props) {
         </View>
 
         <View>
-          <Text style={styles.name}>Andres Miranda</Text>
-          <Text style={styles.plan}>Usuario Premium</Text>
+          <Text style={styles.name}>Usuario</Text>
+          <Text style={styles.plan}>Activo</Text>
         </View>
       </View>
 
@@ -76,15 +77,6 @@ export default function SettingsScreen({ onLogout }: Props) {
 
         <View style={styles.row}>
           <View style={styles.rowLeft}>
-            <Ionicons name="language-outline" size={18} color={colors.primary} />
-            <Text style={styles.item}>Idioma</Text>
-          </View>
-
-          <Text style={styles.value}>Español</Text>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.rowLeft}>
             <Ionicons name="notifications-outline" size={18} color={colors.primary} />
             <Text style={styles.item}>Notificaciones</Text>
           </View>
@@ -98,14 +90,13 @@ export default function SettingsScreen({ onLogout }: Props) {
 
       </View>
 
-      <Text style={styles.section}>SOPORTE</Text>
-
-      <View style={styles.card}>
-        <ItemRow icon="help-circle-outline" label="Centro de ayuda" />
-        <ItemRow icon="shield-checkmark-outline" label="Politica de privacidad" />
-      </View>
-
-      <TouchableOpacity style={styles.logout} onPress={onLogout}>
+      {/* 🔥 LOGOUT REAL */}
+      <TouchableOpacity
+        style={styles.logout}
+        onPress={() => {
+          logout();
+        }}
+      >
         <Text style={styles.logoutText}>CERRAR SESION</Text>
       </TouchableOpacity>
 

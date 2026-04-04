@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
-    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "^7.15.5",
     "@react-navigation/native": "^7.1.33",
     "expo": "54.0.6",
@@ -29,11 +29,25 @@
     "react-native-svg": "15.12.1",
     "react-native-web": "^0.21.0",
     "victory": "^37.3.6",
-    "victory-native": "^41.20.2"
+    "victory-native": "^41.20.2",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/react": "~19.1.10",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legato-desu/MathOff_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/legato-desu/MathOff_app/issues"
+  },
+  "homepage": "https://github.com/legato-desu/MathOff_app#readme"
 }
