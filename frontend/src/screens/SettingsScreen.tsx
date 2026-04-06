@@ -32,17 +32,14 @@ export default function SettingsScreen() {
   const [newPass, setNewPass] = useState("");
   const [repeatPass, setRepeatPass] = useState("");
 
-  // 👁️ estados para mostrar/ocultar
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showRepeat, setShowRepeat] = useState(false);
 
-  // 📧 mostrar correo
   const handleShowEmail = () => {
     Alert.alert("Correo", user?.email || "No disponible");
   };
 
-  // 🔐 cambio de contraseña REAL
   const handleChangePassword = async () => {
 
     if (!currentPass || !newPass || !repeatPass) {
@@ -63,7 +60,6 @@ export default function SettingsScreen() {
 
       Alert.alert("Éxito", "Contraseña actualizada");
 
-      // limpiar
       setCurrentPass("");
       setNewPass("");
       setRepeatPass("");

@@ -73,7 +73,7 @@ export const changePasswordRequest = async (
       })
     });
 
-    const text = await res.text(); // 🔥 LEER COMO TEXTO PRIMERO
+    const text = await res.text();
 
     console.log("RESPUESTA CRUDA CHANGE PASSWORD:", text);
 

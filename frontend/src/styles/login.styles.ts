@@ -95,7 +95,7 @@ export const createStyles = (colors: any) =>
     },
 
     socialText: {
-      color: colors.text, // 🔥 dinámico
+      color: colors.text,
     },
 
     footer: {

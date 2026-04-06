@@ -19,10 +19,8 @@ import { createStyles } from "../styles/login.styles";
 import { loginRequest } from "../servicios/api";
 import { useAuthStore } from "../store/authStore";
 
-// 🔥 IMPORTAR REGISTER
 import RegisterScreen from "./RegisterScreen";
 
-// 🔥 TIPADO CORRECTO
 type Props = {
   onLogin: () => void;
 };
@@ -42,7 +40,6 @@ export default function LoginScreen({ onLogin }: Props) {
 
   const { login } = useAuthStore();
 
-  // 🔥 AUTO CARGAR USUARIO GUARDADO
   useEffect(() => {
     const loadUser = async () => {
       const saved = await AsyncStorage.getItem("username");
@@ -54,7 +51,6 @@ export default function LoginScreen({ onLogin }: Props) {
     loadUser();
   }, []);
 
-  // 🔥 LOGIN REAL
   const handleLogin = async () => {
     if (!username || !password) {
       Alert.alert("Error", "Completa todos los campos");
@@ -64,10 +60,8 @@ export default function LoginScreen({ onLogin }: Props) {
     try {
       const data = await loginRequest(username, password);
 
-      // 🔥 GUARDAR TOKEN + USUARIO
       login(data.token, data.user);
 
-      // 🔥 RECORDAR USUARIO
       if (remember) {
         await AsyncStorage.setItem("username", username);
       } else {
@@ -81,7 +75,6 @@ export default function LoginScreen({ onLogin }: Props) {
     }
   };
 
-  // 🔥 MOSTRAR REGISTER SCREEN
   if (isRegistering) {
     return (
       <RegisterScreen

@@ -14,7 +14,6 @@ import { createStyles } from "../styles/login.styles";
 
 import { registerRequest } from "../servicios/api";
 
-// 🔥 IMPORTANTE: tipado correcto
 type Props = {
   onBack: () => void;
 };
@@ -40,7 +39,6 @@ export default function RegisterScreen({ onBack }: Props) {
 
       Alert.alert("Éxito", "Cuenta creada correctamente");
 
-      // 🔥 volver al login automáticamente
       onBack();
 
     } catch (error: any) {

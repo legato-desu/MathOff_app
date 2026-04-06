@@ -109,7 +109,6 @@ export const createStyles = (colors: any) =>
       fontWeight: "bold",
     },
 
-    // 🔥 INPUT CON ICONOS (IMPORTANTE)
     inputContainer: {
       flexDirection: "row",
       alignItems: "center",
