@@ -124,7 +124,7 @@ export default function GraphView({ fns }: Props) {
           x={px}
           y={centerY + 15}
           fontSize="10"
-          fill={colors.text} // 🔥 dinámico
+          fill={colors.text}
           textAnchor="middle"
         >
           {scale > 30 ? value.toFixed(1) : Math.round(value)}
@@ -142,7 +142,7 @@ export default function GraphView({ fns }: Props) {
           x={centerX + 5}
           y={py}
           fontSize="10"
-          fill={colors.text} // 🔥 dinámico
+          fill={colors.text}
         >
           {scale > 30 ? value.toFixed(1) : Math.round(value)}
         </SvgText>

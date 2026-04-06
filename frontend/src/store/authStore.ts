@@ -1,4 +1,4 @@
-import { create } from "zustand";
+/* import { create } from "zustand";
 
 type AuthState = {
   token: string | null;
@@ -9,5 +9,23 @@ type AuthState = {
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   login: (token) => set({ token }),
-  logout: () => set({ token: null }), // 🔥 limpia sesión
+  logout: () => set({ token: null }),
+})); */
+
+import { create } from "zustand";
+
+interface AuthState {
+  token: string | null;
+  user: any;
+  login: (token: string, user: any) => void;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>((set) => ({
+  token: null,
+  user: null,
+
+  login: (token, user) => set({ token, user }),
+
+  logout: () => set({ token: null, user: null }),
 }));

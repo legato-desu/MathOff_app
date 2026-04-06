@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const createStyles = (colors: any) =>
   StyleSheet.create({
+
     container: {
       flex: 1,
       backgroundColor: colors.background,
@@ -35,10 +36,10 @@ export const createStyles = (colors: any) =>
     },
 
     name: {
-  color: colors.text,
-  fontSize: 16,
-  fontWeight: "500",
-},
+      color: colors.text,
+      fontSize: 16,
+      fontWeight: "500",
+    },
 
     plan: {
       color: colors.primary,
@@ -46,7 +47,7 @@ export const createStyles = (colors: any) =>
     },
 
     section: {
-      color: colors.textMuted,
+      color: colors.textSecondary,
       fontSize: 12,
       marginBottom: 10,
       marginTop: 10,
@@ -73,7 +74,7 @@ export const createStyles = (colors: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingVertical: 10,
+      paddingVertical: 12,
     },
 
     rowLeft: {
@@ -94,4 +95,35 @@ export const createStyles = (colors: any) =>
       color: colors.error,
       fontWeight: "600",
     },
+
+    button: {
+      backgroundColor: colors.primary,
+      padding: 12,
+      borderRadius: 10,
+      alignItems: "center",
+      marginTop: 10,
+    },
+
+    buttonText: {
+      color: colors.background,
+      fontWeight: "bold",
+    },
+
+    // 🔥 INPUT CON ICONOS (IMPORTANTE)
+    inputContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: colors.card,
+      borderRadius: 12,
+      paddingHorizontal: 12,
+      marginBottom: 10,
+    },
+
+    input: {
+      flex: 1,
+      color: colors.text,
+      paddingVertical: 12,
+      marginLeft: 10,
+    },
+
   });

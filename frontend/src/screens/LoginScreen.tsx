@@ -19,9 +19,10 @@ import { createStyles } from "../styles/login.styles";
 import { loginRequest } from "../servicios/api";
 import { useAuthStore } from "../store/authStore";
 
-// 🔥 NUEVO: importar pantalla de registro
+// 🔥 IMPORTAR REGISTER
 import RegisterScreen from "./RegisterScreen";
 
+// 🔥 TIPADO CORRECTO
 type Props = {
   onLogin: () => void;
 };
@@ -32,19 +33,16 @@ export default function LoginScreen({ onLogin }: Props) {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  // 🔥 NUEVO: username en lugar de email
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // 🔥 NUEVO: recordar usuario
   const [remember, setRemember] = useState(false);
 
-  // 🔥 NUEVO: controlar pantalla registro
   const [isRegistering, setIsRegistering] = useState(false);
 
   const { login } = useAuthStore();
 
-  // 🔥 NUEVO: cargar usuario guardado
+  // 🔥 AUTO CARGAR USUARIO GUARDADO
   useEffect(() => {
     const loadUser = async () => {
       const saved = await AsyncStorage.getItem("username");
@@ -56,7 +54,7 @@ export default function LoginScreen({ onLogin }: Props) {
     loadUser();
   }, []);
 
-  // 🚀 LOGIN
+  // 🔥 LOGIN REAL
   const handleLogin = async () => {
     if (!username || !password) {
       Alert.alert("Error", "Completa todos los campos");
@@ -66,25 +64,30 @@ export default function LoginScreen({ onLogin }: Props) {
     try {
       const data = await loginRequest(username, password);
 
-      login(data.token);
+      // 🔥 GUARDAR TOKEN + USUARIO
+      login(data.token, data.user);
 
-      // 🔥 NUEVO: guardar o borrar usuario según checkbox
+      // 🔥 RECORDAR USUARIO
       if (remember) {
         await AsyncStorage.setItem("username", username);
       } else {
         await AsyncStorage.removeItem("username");
       }
 
-      
+      onLogin();
 
     } catch (error: any) {
       Alert.alert("Error", error.message);
     }
   };
 
-  // 🔥 NUEVO: mostrar pantalla de registro
+  // 🔥 MOSTRAR REGISTER SCREEN
   if (isRegistering) {
-    return <RegisterScreen onBack={() => setIsRegistering(false)} />;
+    return (
+      <RegisterScreen
+        onBack={() => setIsRegistering(false)} // ✅ SOLUCIÓN ERROR
+      />
+    );
   }
 
   return (
@@ -96,7 +99,7 @@ export default function LoginScreen({ onLogin }: Props) {
 
       <Text style={styles.title}>MathOff</Text>
 
-      {/* 🔥 NUEVO: USERNAME */}
+      {/* 🔥 USERNAME */}
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -130,7 +133,7 @@ export default function LoginScreen({ onLogin }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* 🔥 NUEVO: CHECKBOX RECORDARME */}
+      {/* 🔥 RECORDARME */}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 15 }}>
         <TouchableOpacity onPress={() => setRemember(!remember)}>
           <Ionicons
@@ -149,7 +152,7 @@ export default function LoginScreen({ onLogin }: Props) {
         <Text style={styles.buttonText}>INICIAR</Text>
       </TouchableOpacity>
 
-      {/* 🔥 NUEVO: IR A REGISTRO */}
+      {/* 🔥 IR A REGISTRO */}
       <Text style={styles.footer}>
         No tienes cuenta?{" "}
         <Text

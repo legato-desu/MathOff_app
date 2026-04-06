@@ -18,7 +18,7 @@ const STORAGE_KEY = "APP_THEME";
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const [isDark, setIsDark] = useState(true);
-  const [loaded, setLoaded] = useState(false); // 👈 importante
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const loadTheme = async () => {

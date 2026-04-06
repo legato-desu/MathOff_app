@@ -49,7 +49,7 @@ export const createStyles = (colors: any) =>
 
     input: {
       flex: 1,
-      color: colors.text, // 🔥 cambiado (antes white)
+      color: colors.text,
       paddingVertical: 15,
       marginLeft: 10,
     },

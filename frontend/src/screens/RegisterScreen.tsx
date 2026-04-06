@@ -8,15 +8,19 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
+
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/login.styles";
+
 import { registerRequest } from "../servicios/api";
 
+// 🔥 IMPORTANTE: tipado correcto
 type Props = {
   onBack: () => void;
 };
 
 export default function RegisterScreen({ onBack }: Props) {
+
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
@@ -24,23 +28,19 @@ export default function RegisterScreen({ onBack }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleRegister = async () => {
-
-    console.log("USERNAME FRONT:", username); // 🔥 DEBUG
-
-    if (!username.trim() || !email.trim() || !password.trim()) {
-      Alert.alert("Error", "Completa todos los campos");
-      return;
+    if (!username || !email || !password) {
+      return Alert.alert("Error", "Completa todos los campos");
     }
 
     try {
-      await registerRequest(
-        username.trim(),  // 🔥 IMPORTANTE
-        email.trim(),
-        password.trim()
-      );
+      await registerRequest(username, email, password);
 
-      Alert.alert("Éxito", "Usuario creado");
+      Alert.alert("Éxito", "Cuenta creada correctamente");
+
+      // 🔥 volver al login automáticamente
       onBack();
 
     } catch (error: any) {
@@ -53,7 +53,7 @@ export default function RegisterScreen({ onBack }: Props) {
 
       <Text style={styles.title}>Crear cuenta</Text>
 
-      {/* USERNAME */}
+      {/* 👤 USERNAME */}
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -61,14 +61,11 @@ export default function RegisterScreen({ onBack }: Props) {
           placeholderTextColor={colors.textSecondary}
           style={styles.input}
           value={username}
-          onChangeText={(text) => {
-            console.log("INPUT USERNAME:", text); // 🔥 DEBUG
-            setUsername(text);
-          }}
+          onChangeText={setUsername}
         />
       </View>
 
-      {/* EMAIL */}
+      {/* 📧 EMAIL */}
       <View style={styles.inputContainer}>
         <Ionicons name="mail-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -77,28 +74,42 @@ export default function RegisterScreen({ onBack }: Props) {
           style={styles.input}
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
         />
       </View>
 
-      {/* PASSWORD */}
+      {/* 🔒 PASSWORD */}
       <View style={styles.inputContainer}>
         <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
+
         <TextInput
           placeholder="Contraseña"
           placeholderTextColor={colors.textSecondary}
-          secureTextEntry
+          secureTextEntry={!showPassword}
           style={styles.input}
           value={password}
           onChangeText={setPassword}
         />
+
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Ionicons
+            name={showPassword ? "eye-off-outline" : "eye-outline"}
+            size={18}
+            color={colors.textSecondary}
+          />
+        </TouchableOpacity>
       </View>
 
+      {/* 🔥 BOTÓN REGISTRAR */}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>REGISTRARSE</Text>
+        <Text style={styles.buttonText}>REGISTRAR</Text>
       </TouchableOpacity>
 
+      {/* 🔙 VOLVER */}
       <TouchableOpacity onPress={onBack}>
-        <Text style={styles.link}>Volver</Text>
+        <Text style={styles.link}>
+          Volver al login
+        </Text>
       </TouchableOpacity>
 
     </View>
