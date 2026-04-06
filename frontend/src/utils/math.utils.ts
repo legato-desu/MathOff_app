@@ -3,29 +3,26 @@
 export const parseExpression = (expr: string): string => {
   let parsed = expr;
 
-  // 🔢 constantes
   parsed = parsed.replace(/π/g, "Math.PI");
 
-  // 🧠 funciones (orden importante)
   parsed = parsed
     .replace(/sin/g, "Math.sin")
     .replace(/cos/g, "Math.cos")
     .replace(/tan/g, "Math.tan")
     .replace(/√/g, "Math.sqrt")
-    .replace(/ln/g, "Math.log")       // log natural
-    .replace(/log/g, "Math.log10")    // log base 10
+    .replace(/ln/g, "Math.log")
+    .replace(/log/g, "Math.log10")
     .replace(/exp/g, "Math.exp");
 
   // ⚡ potencias
   parsed = parsed.replace(/\^/g, "**");
 
-  // 🔥 auto multiplicación (más completo)
   parsed = parsed
-    .replace(/(\d)(x)/g, "$1*$2")             // 2x → 2*x
-    .replace(/(\d)(Math\.)/g, "$1*$2")        // 2sin → 2*Math.sin
-    .replace(/(\))(Math\.)/g, "$1*$2")        // )sin → )*Math.sin
-    .replace(/(\d)\(/g, "$1*(")               // 2( → 2*(
-    .replace(/(\))(x)/g, "$1*$2");            // )x → )*x
+    .replace(/(\d)(x)/g, "$1*$2")
+    .replace(/(\d)(Math\.)/g, "$1*$2")
+    .replace(/(\))(Math\.)/g, "$1*$2")
+    .replace(/(\d)\(/g, "$1*(")
+    .replace(/(\))(x)/g, "$1*$2");
 
   return parsed;
 };
@@ -42,7 +39,6 @@ export const evaluateExpression = (
 
     const fn = new Function("x", `return ${parsed}`) as (x: number) => number;
 
-    // 🔥 validación real
     const test = fn(1);
 
     if (typeof test !== "number" || isNaN(test)) {

@@ -1,6 +1,5 @@
-const API_URL = "http://192.168.2.187:3000/api"; // 🔥 TU IP REAL
+const API_URL = "http://192.168.2.187:3000/api";
 
-// 🔑 LOGIN
 export const loginRequest = async (username: string, password: string) => {
   try {
     const response = await fetch(`${API_URL}/auth/login`, {
@@ -26,7 +25,6 @@ export const loginRequest = async (username: string, password: string) => {
   console.log("ERROR COMPLETO:", error);
   throw error;
 }
-
   
 };
 
@@ -41,7 +39,7 @@ export const registerRequest = async (
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username: username, // 🔥 FORZADO
+      username: username,
       email: email,
       password: password,
     }),
@@ -54,4 +52,47 @@ export const registerRequest = async (
   }
 
   return data;
+};
+
+
+export const changePasswordRequest = async (
+  userId: number,
+  currentPassword: string,
+  newPassword: string
+) => {
+
+  try {
+
+    const res = await fetch(`${API_URL}/auth/change-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        currentPassword,
+        newPassword
+      })
+    });
+
+    const text = await res.text();
+
+    console.log("RESPUESTA CRUDA CHANGE PASSWORD:", text);
+
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error("El servidor no respondió JSON (ruta incorrecta o error backend)");
+    }
+
+    if (!res.ok) {
+      throw new Error(data.message || "Error desconocido");
+    }
+
+    return data;
+
+  } catch (error: any) {
+    console.log("ERROR CHANGE PASSWORD:", error);
+    throw error;
+  }
 };
