@@ -36,8 +36,14 @@ export default function SettingsScreen() {
   const [showNew, setShowNew] = useState(false);
   const [showRepeat, setShowRepeat] = useState(false);
 
+  // Mostrar correo
   const handleShowEmail = () => {
     Alert.alert("Correo", user?.email || "No disponible");
+  };
+
+  // Mostrar rol
+  const handleShowRole = () => {
+    Alert.alert("Rol", "Usuario");
   };
 
   const handleChangePassword = async () => {
@@ -76,7 +82,7 @@ export default function SettingsScreen() {
 
       <Text style={styles.header}>Opciones</Text>
 
-      {/* 👤 PERFIL */}
+      {/* PERFIL */}
       <View style={styles.profileCard}>
         <View style={styles.avatar}>
           <Text style={{ color: colors.primary, fontSize: 22 }}>👤</Text>
@@ -92,7 +98,7 @@ export default function SettingsScreen() {
 
       <View style={styles.card}>
 
-        {/* 📧 VER CORREO */}
+        {/* VER CORREO */}
         <TouchableOpacity style={styles.row} onPress={handleShowEmail}>
           <View style={styles.rowLeft}>
             <Ionicons name="mail-outline" size={18} color={colors.primary} />
@@ -100,7 +106,15 @@ export default function SettingsScreen() {
           </View>
         </TouchableOpacity>
 
-        {/* 🔐 CAMBIAR PASSWORD */}
+        {/* VER ROL */}
+        <TouchableOpacity style={styles.row} onPress={handleShowRole}>
+          <View style={styles.rowLeft}>
+            <Ionicons name="shield-outline" size={18} color={colors.primary} />
+            <Text style={styles.item}>Rol</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* CAMBIAR PASSWORD */}
         <TouchableOpacity
           style={styles.row}
           onPress={() => setShowPasswordModal(true)}
@@ -117,7 +131,7 @@ export default function SettingsScreen() {
 
       <View style={styles.card}>
 
-        {/* 🌙 TEMA */}
+        {/* TEMA */}
         <View style={styles.row}>
           <View style={styles.rowLeft}>
             <Ionicons name="moon-outline" size={18} color={colors.primary} />
@@ -131,7 +145,7 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* 🔔 NOTIFICACIONES */}
+        {/* NOTIFICACIONES */}
         <View style={styles.row}>
           <View style={styles.rowLeft}>
             <Ionicons name="notifications-outline" size={18} color={colors.primary} />
@@ -145,7 +159,7 @@ export default function SettingsScreen() {
           />
         </View>
 
-        {/* 🌍 IDIOMA */}
+        {/* IDIOMA */}
         <View style={styles.row}>
           <View style={styles.rowLeft}>
             <Ionicons name="language-outline" size={18} color={colors.primary} />
@@ -161,12 +175,12 @@ export default function SettingsScreen() {
 
       </View>
 
-      {/* 🚪 LOGOUT */}
+      {/* LOGOUT */}
       <TouchableOpacity style={styles.logout} onPress={logout}>
         <Text style={styles.logoutText}>CERRAR SESION</Text>
       </TouchableOpacity>
 
-      {/* 🔐 MODAL CAMBIO CONTRASEÑA */}
+      {/* MODAL CAMBIO CONTRASEÑA */}
       <Modal visible={showPasswordModal} transparent animationType="slide">
 
         <View style={{
@@ -186,7 +200,7 @@ export default function SettingsScreen() {
               Cambiar contraseña
             </Text>
 
-            {/* 🔐 ACTUAL */}
+            {/* ACTUAL */}
             <View style={styles.inputContainer}>
               <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
 
@@ -207,7 +221,7 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* 🔐 NUEVA */}
+            {/* NUEVA */}
             <View style={styles.inputContainer}>
               <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
 
@@ -228,7 +242,7 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* 🔐 REPETIR */}
+            {/* REPETIR */}
             <View style={styles.inputContainer}>
               <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
 
@@ -249,7 +263,7 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* 🔥 BOTONES */}
+            {/* BOTONES */}
             <View style={{ flexDirection: "row", marginTop: 10 }}>
 
               <TouchableOpacity
