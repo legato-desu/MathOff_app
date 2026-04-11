@@ -14,10 +14,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#071A24"
     },
-
-    "ios": {
-      "supportsTablet": true
-    },
+    
+    "ios": { "supportsTablet": true, 
+    "infoPlist": 
+      { "NSCameraUsageDescription": "Esta app necesita la cámara para escanear ecuaciones" } },
 
     "android": {
       "icon": "./assets/logo.png",

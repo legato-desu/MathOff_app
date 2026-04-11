@@ -1,6 +1,4 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://192.168.39.126:3000/api";
-
-console.log("API:", API_URL);
+const API_URL = "http://10.157.29.53:3000/api";
 
 export const loginRequest = async (username: string, password: string) => {
   try {
