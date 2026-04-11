@@ -12,7 +12,6 @@ router.post("/register", async (req, res) => {
 
   const { username, email, password } = req.body;
 
-  // 🔍 Validación básica
   if (!username || !email || !password) {
     return res.status(400).json({ message: "Faltan datos" });
   }
@@ -21,45 +20,33 @@ router.post("/register", async (req, res) => {
     // 🔐 Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 🔍 Verificar si usuario ya existe
-    db.query(
-      "SELECT * FROM users WHERE email = ? OR username = ?",
-      [email, username],
-      (err, results) => {
-        if (err) {
-          console.log("❌ ERROR SELECT:", err);
-          return res.status(500).json({ message: "Error servidor" });
-        }
-
-        if (results.length > 0) {
-          return res.status(400).json({ message: "Usuario ya existe" });
-        }
-
-        // 🟢 Insertar usuario
-        db.query(
-          "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-          [username, email, hashedPassword],
-          (err) => {
-            if (err) {
-              console.log("❌ ERROR INSERT:", err);
-              return res.status(500).json({ message: "Error al registrar" });
-            }
-
-            res.json({ message: "Usuario creado correctamente" });
-          }
-        );
-      }
+    // 🔍 Verificar si existe
+    const existingUser = await db.query(
+      "SELECT * FROM users WHERE email = $1 OR username = $2",
+      [email, username]
     );
 
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ message: "Usuario ya existe" });
+    }
+
+    // 🟢 Insertar usuario
+    await db.query(
+      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
+      [username, email, hashedPassword]
+    );
+
+    res.json({ message: "Usuario creado correctamente" });
+
   } catch (error) {
-    console.log("❌ ERROR HASH:", error);
+    console.log("❌ ERROR REGISTER:", error);
     res.status(500).json({ message: "Error en el servidor" });
   }
 });
 
 
-// 🟢 LOGIN (username o email)
-router.post("/login", (req, res) => {
+// 🟢 LOGIN
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   console.log("🔥 LOGIN BODY:", req.body);
@@ -68,103 +55,88 @@ router.post("/login", (req, res) => {
     return res.status(400).json({ message: "Faltan datos" });
   }
 
-  // 🔍 Buscar por username o email
-  db.query(
-    "SELECT * FROM users WHERE username = ? OR email = ?",
-    [username, username],
-    async (err, results) => {
-      if (err) {
-        console.log("❌ ERROR LOGIN:", err);
-        return res.status(500).json({ message: "Error servidor" });
-      }
+  try {
+    const result = await db.query(
+      "SELECT * FROM users WHERE username = $1 OR email = $2",
+      [username, username]
+    );
 
-      if (results.length === 0) {
-        return res.status(400).json({ message: "Usuario no existe" });
-      }
-
-      const user = results[0];
-
-      try {
-        // 🔐 Comparar contraseña
-        const validPassword = await bcrypt.compare(password, user.password);
-
-        if (!validPassword) {
-          return res.status(400).json({ message: "Contraseña incorrecta" });
-        }
-
-        // 🎟️ Crear token
-        const token = jwt.sign(
-          { id: user.id },
-          "SECRET_KEY",
-          { expiresIn: "1d" }
-        );
-
-        /* res.json({ token }); */
-
-        res.json({
-  token,
-  user: {
-    id: user.id,
-    username: user.username,
-    email: user.email,
-  },
-});
-
-      } catch (error) {
-        console.log("❌ ERROR COMPARE:", error);
-        res.status(500).json({ message: "Error en el servidor" });
-      }
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "Usuario no existe" });
     }
-  );
+
+    const user = result.rows[0];
+
+    // 🔐 Validar contraseña
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (!validPassword) {
+      return res.status(400).json({ message: "Contraseña incorrecta" });
+    }
+
+    // 🎟️ Token
+    const token = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    console.log("❌ ERROR LOGIN:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
 });
 
-// 🔐 CAMBIAR CONTRASEÑA REAL
+
+// 🔐 CAMBIAR CONTRASEÑA
 router.post("/change-password", async (req, res) => {
   const { userId, currentPassword, newPassword } = req.body;
 
+  if (!userId || !currentPassword || !newPassword) {
+    return res.status(400).json({ message: "Faltan datos" });
+  }
+
   try {
-    db.query(
-      "SELECT * FROM users WHERE id = ?",
-      [userId],
-      async (err, results) => {
-
-        if (err) {
-          return res.status(500).json({ message: "Error servidor" });
-        }
-
-        if (results.length === 0) {
-          return res.status(400).json({ message: "Usuario no existe" });
-        }
-
-        const user = results[0];
-
-        // 🔐 validar contraseña actual
-        const valid = await bcrypt.compare(currentPassword, user.password);
-
-        if (!valid) {
-          return res.status(400).json({ message: "Contraseña actual incorrecta" });
-        }
-
-        // 🔥 encriptar nueva
-        const hashed = await bcrypt.hash(newPassword, 10);
-
-        db.query(
-          "UPDATE users SET password = ? WHERE id = ?",
-          [hashed, userId],
-          (err2) => {
-
-            if (err2) {
-              return res.status(500).json({ message: "Error actualizando" });
-            }
-
-            res.json({ message: "Contraseña actualizada" });
-          }
-        );
-      }
+    const result = await db.query(
+      "SELECT * FROM users WHERE id = $1",
+      [userId]
     );
 
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "Usuario no existe" });
+    }
+
+    const user = result.rows[0];
+
+    // 🔐 Validar contraseña actual
+    const valid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!valid) {
+      return res.status(400).json({ message: "Contraseña actual incorrecta" });
+    }
+
+    // 🔥 Nueva contraseña
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await db.query(
+      "UPDATE users SET password = $1 WHERE id = $2",
+      [hashed, userId]
+    );
+
+    res.json({ message: "Contraseña actualizada" });
+
   } catch (error) {
-    res.status(500).json({ message: "Error servidor" });
+    console.log("❌ ERROR CHANGE PASSWORD:", error);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 });
 

@@ -1,16 +1,18 @@
-import mysql from "mysql2";
+import pkg from "pg";
+import dotenv from "dotenv";
 
-export const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "mathoff_app",
+dotenv.config();
+
+const { Pool } = pkg;
+
+export const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-db.connect((err) => {
-  if (err) {
-    console.log("❌ Error conexión:", err);
-  } else {
-    console.log("✅ MySQL conectado");
-  }
-});
+// 🔍 Test conexión
+db.connect()
+  .then(() => console.log("✅ PostgreSQL conectado"))
+  .catch((err) => console.log("❌ Error conexión:", err));
