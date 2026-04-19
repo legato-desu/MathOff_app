@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "./src/theme/ThemeContext";
 import MainNavigator from "./src/navigation/MainNavigator";
+import AuthModal from "./src/components/AuthModal";
 
 export default function App() {
   return (
@@ -11,6 +12,8 @@ export default function App() {
       <ThemeProvider>
         <NavigationContainer>
           <MainNavigator />
+          <AuthModal />
+
         </NavigationContainer>
       </ThemeProvider>
     </GestureHandlerRootView>

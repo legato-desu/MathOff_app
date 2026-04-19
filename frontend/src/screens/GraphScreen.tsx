@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Animated
+} from "react-native";
+
+import { useAuthStore } from "../store/authStore";
 
 import GraphView from "../components/GraphView";
 import MathKeyboard from "../components/MathKeyboard";
@@ -14,29 +23,74 @@ export default function GraphScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
+  const token = useAuthStore((state) => state.token);
+  const openLogin = useAuthStore((state) => state.openLogin);
+
   const [expression, setExpression] = useState("");
   const [functions, setFunctions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // 🔥 ANIMACIÓN SHAKE
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+
+  const triggerShake = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnim, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  };
+
+  // ✅ TODOS LOS HOOKS ARRIBA (regla de oro)
+  useEffect(() => {
+    if (!token) {
+      openLogin();
+    }
+  }, [token]);
+
+  // 🔒 BLOQUEO UI (después de hooks)
+  if (!token) {
+    return (
+      <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
+
+        <Text style={{ color: colors.text, marginBottom: 20, textAlign: "center" }}>
+          Debes iniciar sesión para usar el graficador
+        </Text>
+
+        <Animated.View style={{ transform: [{ translateX: shakeAnim }] }}>
+          <TouchableOpacity
+            onPress={() => {
+              triggerShake();
+              openLogin();
+            }}
+            style={{
+              backgroundColor: colors.primary,
+              padding: 12,
+              borderRadius: 10
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>
+              Iniciar sesión
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+      </View>
+    );
+  }
+
+  // 🔢 FUNCIONES
+
   const getRandomColor = () => {
     const palette = [
-      "#00C2FF",
-      "#FF6B6B",
-      "#FFD93D",
-      "#6BCB77",
-      "#A66CFF",
-      "#FF9F1C",
-      "#2EC4B6",
-      "#E71D36",
-      "#8338EC",
-      "#3A86FF"
+      "#00C2FF","#FF6B6B","#FFD93D","#6BCB77","#A66CFF",
+      "#FF9F1C","#2EC4B6","#E71D36","#8338EC","#3A86FF"
     ];
-
     return palette[Math.floor(Math.random() * palette.length)];
   };
 
   const handleInput = (value: string) => {
-
     if (value === "=") {
       const result = evaluateExpression(expression);
 
