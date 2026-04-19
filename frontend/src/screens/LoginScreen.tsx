@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { Ionicons } from "@expo/vector-icons";
 
+
 import {
   View,
   Text,
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/login.styles";
@@ -21,24 +23,19 @@ import { useAuthStore } from "../store/authStore";
 
 import RegisterScreen from "./RegisterScreen";
 
-type Props = {
-  onLogin: () => void;
-};
-
-export default function LoginScreen({ onLogin }: Props) {
+export default function LoginScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
 
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [remember, setRemember] = useState(false);
-
   const [isRegistering, setIsRegistering] = useState(false);
 
-  const { login } = useAuthStore();
+  const login = useAuthStore((state) => state.login);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -60,31 +57,34 @@ export default function LoginScreen({ onLogin }: Props) {
     try {
       const data = await loginRequest(username, password);
 
+      // 🔐 Guardar en Zustand
       login(data.token, data.user);
 
+      // 💾 Recordar usuario
       if (remember) {
         await AsyncStorage.setItem("username", username);
       } else {
         await AsyncStorage.removeItem("username");
       }
 
-      onLogin();
 
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", error.message || "Error al iniciar sesión");
     }
   };
 
+  // 🔁 CAMBIO A REGISTRO
   if (isRegistering) {
     return (
       <RegisterScreen
-        onBack={() => setIsRegistering(false)} // ✅ SOLUCIÓN ERROR
+        onBack={() => setIsRegistering(false)}
       />
     );
   }
 
   return (
     <View style={styles.container}>
+      
 
       <View style={styles.logoBox}>
         <Image source={logo} style={styles.logoImage} />
@@ -92,7 +92,7 @@ export default function LoginScreen({ onLogin }: Props) {
 
       <Text style={styles.title}>MathOff</Text>
 
-      {/* 🔥 USERNAME */}
+      {/* 👤 USERNAME */}
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -126,7 +126,7 @@ export default function LoginScreen({ onLogin }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* 🔥 RECORDARME */}
+      {/* ✅ RECORDARME */}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 15 }}>
         <TouchableOpacity onPress={() => setRemember(!remember)}>
           <Ionicons
@@ -140,12 +140,12 @@ export default function LoginScreen({ onLogin }: Props) {
         </Text>
       </View>
 
-      {/* 🔥 BOTÓN LOGIN */}
+      {/* 🚀 LOGIN */}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>INICIAR</Text>
       </TouchableOpacity>
 
-      {/* 🔥 IR A REGISTRO */}
+      {/* 🔗 REGISTRO */}
       <Text style={styles.footer}>
         No tienes cuenta?{" "}
         <Text
