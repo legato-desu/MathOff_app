@@ -1,8 +1,12 @@
-const API_URL = "http://10.157.29.53:3000/api";
+feature/ip
+const API_URL = "https://mathoff-app.onrender.com/api/auth";
 
+console.log("API:", API_URL);
+
+// 🔐 LOGIN
 export const loginRequest = async (username: string, password: string) => {
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,48 +26,52 @@ export const loginRequest = async (username: string, password: string) => {
     return data;
 
   } catch (error: any) {
-  console.log("ERROR COMPLETO:", error);
-  throw error;
-}
-  
+    console.log("ERROR COMPLETO:", error);
+    throw error;
+  }
 };
 
+// 🟢 REGISTER
 export const registerRequest = async (
   username: string,
   email: string,
   password: string
 ) => {
-  const response = await fetch(`${API_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username,
-      email: email,
-      password: password,
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!response.ok) {
-    throw new Error(data.message);
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+
+  } catch (error: any) {
+    console.log("ERROR REGISTER:", error);
+    throw error;
   }
-
-  return data;
 };
 
-
+// 🔐 CAMBIAR CONTRASEÑA
 export const changePasswordRequest = async (
   userId: number,
   currentPassword: string,
   newPassword: string
 ) => {
-
   try {
-
-    const res = await fetch(`${API_URL}/auth/change-password`, {
+    const res = await fetch(`${API_URL}/change-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -74,7 +82,6 @@ export const changePasswordRequest = async (
     });
 
     const text = await res.text();
-
     console.log("RESPUESTA CRUDA CHANGE PASSWORD:", text);
 
     let data;
@@ -82,7 +89,7 @@ export const changePasswordRequest = async (
     try {
       data = JSON.parse(text);
     } catch {
-      throw new Error("El servidor no respondió JSON (ruta incorrecta o error backend)");
+      throw new Error("El servidor no respondió JSON");
     }
 
     if (!res.ok) {

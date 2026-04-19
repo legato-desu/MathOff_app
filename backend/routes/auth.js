@@ -5,7 +5,6 @@ import { db } from "../db.js";
 
 const router = express.Router();
 
-
 // 🟢 REGISTER
 router.post("/register", async (req, res) => {
   console.log("🔥 REGISTER BODY:", req.body);
@@ -17,10 +16,8 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    // 🔐 Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 🔍 Verificar si existe
     const existingUser = await db.query(
       "SELECT * FROM users WHERE email = $1 OR username = $2",
       [email, username]
@@ -30,7 +27,6 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Usuario ya existe" });
     }
 
-    // 🟢 Insertar usuario
     await db.query(
       "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
       [username, email, hashedPassword]
@@ -39,23 +35,24 @@ router.post("/register", async (req, res) => {
     res.json({ message: "Usuario creado correctamente" });
 
   } catch (error) {
-    console.log("❌ ERROR REGISTER:", error);
-    res.status(500).json({ message: "Error en el servidor" });
+    console.error("❌ ERROR REGISTER:", error);
+    res.status(500).json({ message: error.message });
   }
 });
 
 
-// 🟢 LOGIN
+// 🔐 LOGIN
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
   console.log("🔥 LOGIN BODY:", req.body);
+
+  const { username, password } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({ message: "Faltan datos" });
   }
 
   try {
+    // 🔍 Buscar usuario
     const result = await db.query(
       "SELECT * FROM users WHERE username = $1 OR email = $2",
       [username, username]
@@ -74,7 +71,14 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Contraseña incorrecta" });
     }
 
-    // 🎟️ Token
+    // 🔥 DEBUG JWT
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET no está definido");
+    }
+
+    // 🎟️ Generar token
     const token = jwt.sign(
       { id: user.id },
       process.env.JWT_SECRET,
@@ -91,8 +95,11 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (error) {
-    console.log("❌ ERROR LOGIN:", error);
-    res.status(500).json({ message: "Error en el servidor" });
+    console.error("❌ ERROR LOGIN COMPLETO:", error);
+
+    res.status(500).json({
+      message: error.message || "Error en el servidor",
+    });
   }
 });
 
@@ -117,14 +124,12 @@ router.post("/change-password", async (req, res) => {
 
     const user = result.rows[0];
 
-    // 🔐 Validar contraseña actual
     const valid = await bcrypt.compare(currentPassword, user.password);
 
     if (!valid) {
       return res.status(400).json({ message: "Contraseña actual incorrecta" });
     }
 
-    // 🔥 Nueva contraseña
     const hashed = await bcrypt.hash(newPassword, 10);
 
     await db.query(
@@ -135,10 +140,9 @@ router.post("/change-password", async (req, res) => {
     res.json({ message: "Contraseña actualizada" });
 
   } catch (error) {
-    console.log("❌ ERROR CHANGE PASSWORD:", error);
-    res.status(500).json({ message: "Error en el servidor" });
+    console.error("❌ ERROR CHANGE PASSWORD:", error);
+    res.status(500).json({ message: error.message });
   }
 });
-
 
 export default router;
