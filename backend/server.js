@@ -1,18 +1,21 @@
+import dotenv from "dotenv";
+dotenv.config(); // 🔥 SIEMPRE PRIMERO
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import { db } from "./db.js";
 
-dotenv.config();
-
 const app = express();
+
+// 🔍 DEBUG (temporal)
+console.log("🌍 DATABASE_URL:", process.env.DATABASE_URL);
 
 // 🔓 Middlewares
 app.use(cors());
 app.use(express.json());
 
-// 🔥 Inicializar base de datos (crear tabla)
+// 🔥 Inicializar base de datos
 const initDB = async () => {
   try {
     await db.query(`
@@ -35,6 +38,17 @@ initDB();
 // 📌 Ruta principal
 app.get("/", (req, res) => {
   res.send("🚀 API MathOff funcionando correctamente");
+});
+
+// 🧪 Test DB
+app.get("/api/test-db", async (req, res) => {
+  try {
+    const result = await db.query("SELECT NOW()");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("DB ERROR:", error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // 🔑 Rutas
