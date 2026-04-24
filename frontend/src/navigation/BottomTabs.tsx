@@ -7,7 +7,7 @@ import { useTheme } from "../theme/ThemeContext";
 
 import GraphScreen from "../screens/GraphScreen";
 import ScanScreen from "../screens/ScanScreen";
-import LibraryScreen from "../screens/LibraryScreen";
+import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
@@ -46,8 +46,7 @@ export default function BottomTabs() {
     >
 
       {/* 🔹 INICIO (antes Librería) */}
-      <Tab.Screen name="Inicio" component={LibraryScreen} />
-
+<Tab.Screen name="Inicio" component={HomeScreen} />
       {/* 🔹 ESCÁNER */}
       <Tab.Screen 
         name="Escaner" 

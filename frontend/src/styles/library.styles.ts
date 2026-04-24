@@ -2,17 +2,36 @@ import { StyleSheet } from "react-native";
 
 export const getStyles = (colors: any) =>
   StyleSheet.create({
+
     container: {
       flex: 1,
       backgroundColor: colors.background,
-      padding: 20,
+      paddingTop: 20,
+    },
+
+    scrollContent: {
+      alignItems: "center", 
+      paddingBottom: 40
+    },
+
+    content: {
+      width: "100%",
+      maxWidth: 420, 
+      alignSelf: "center",
+      paddingHorizontal: 10
+    },
+
+    headerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 20,
     },
 
     header: {
       color: colors.text,
-      fontSize: 24,
-      marginBottom: 10,
+      fontSize: 22,
       fontWeight: "bold",
+      marginLeft: 10
     },
 
     tabsContainer: {
@@ -35,6 +54,7 @@ export const getStyles = (colors: any) =>
       flexDirection: "row",
       justifyContent: "space-between",
       marginBottom: 10,
+      marginTop: 10
     },
 
     sectionTitle: {
@@ -46,16 +66,11 @@ export const getStyles = (colors: any) =>
       color: colors.primary,
     },
 
-    graphRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: 25,
-    },
-
     quickLearnTitle: {
       color: colors.text,
       fontSize: 20,
       marginBottom: 15,
+      marginTop: 10,
       fontWeight: "bold",
     },
 
@@ -63,7 +78,13 @@ export const getStyles = (colors: any) =>
       backgroundColor: colors.card,
       padding: 15,
       borderRadius: 12,
-      marginBottom: 10,
+      marginBottom: 12,
+
+      shadowColor: "#000",
+      shadowOpacity: 0.1,
+      shadowRadius: 5,
+      shadowOffset: { width: 0, height: 2 },
+      elevation: 3
     },
 
     cardTitle: {
@@ -73,7 +94,9 @@ export const getStyles = (colors: any) =>
     },
 
     cardSubtitle: {
-      color: colors.text, 
+      color: colors.text,
       fontSize: 12,
+      opacity: 0.7
     },
+
   });
