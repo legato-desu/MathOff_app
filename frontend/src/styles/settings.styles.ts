@@ -21,8 +21,14 @@ export const createStyles = (colors: any) =>
       borderRadius: 18,
       padding: 18,
       flexDirection: "row",
+      justifyContent: "space-between",
       alignItems: "center",
       marginBottom: 25,
+    },
+
+    profileLeft: {
+      flexDirection: "row",
+      alignItems: "center",
     },
 
     avatar: {

@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 import SavedGraphCard from "../components/SavedGraphCard";
 import { useTheme } from "../theme/ThemeContext";
 import { getStyles } from "../styles/library.styles";
@@ -8,63 +16,96 @@ export default function LibraryScreen() {
 
   const { colors } = useTheme();
   const styles = getStyles(colors);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.header}>
-        Libreria
-      </Text>
+      {/* 🔹 HEADER */}
+      <View style={styles.content}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
 
-      {/* TABS */}
-      <View style={styles.tabsContainer}>
-        <Text style={styles.activeTab}>Historial</Text>
-        <Text style={styles.inactiveTab}>Aprendizaje rapido</Text>
+          <Text style={styles.header}>
+            Librería
+          </Text>
+        </View>
       </View>
 
-      {/* SAVED GRAPHS */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Gráficos Guardados</Text>
-        <Text style={styles.viewAll}>Ver Todos</Text>
-      </View>
+      {/* 🔹 SCROLL CENTRADO */}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
 
-      <View style={styles.graphRow}>
-        <SavedGraphCard title="y = 1 - x²" />
-        <SavedGraphCard title="y = sin(x)" />
-      </View>
+          {/* TABS */}
+          <View style={styles.tabsContainer}>
+            <Text style={styles.activeTab}>Historial</Text>
+            <Text style={styles.inactiveTab}>Aprendizaje</Text>
+          </View>
 
-      {/* QUICK LEARN */}
-      <Text style={styles.quickLearnTitle}>
-        Aprendizaje Rapido
-      </Text>
+          {/* GRÁFICOS */}
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Gráficos Guardados</Text>
+            <Text style={styles.viewAll}>Ver todos</Text>
+          </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Funciones lineales</Text>
-        <Text style={styles.cardSubtitle}>
-          Pendiente, intersecciones, y=mx+b
-        </Text>
-      </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <SavedGraphCard title="y = 1 - x²" />
+            <SavedGraphCard title="y = sin(x)" />
+          </ScrollView>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Ecuaciones cuadráticas</Text>
-        <Text style={styles.cardSubtitle}>
-          Parábolas, raíces, y factorización
-        </Text>
-      </View>
+          {/* APRENDIZAJE */}
+          <Text style={styles.quickLearnTitle}>
+            Aprendizaje rápido
+          </Text>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Funciones trigonométricas</Text>
-        <Text style={styles.cardSubtitle}>
-          Seno, coseno, y círculo unitario
-        </Text>
-      </View>
+          {[
+            {
+              title: "Funciones lineales",
+              desc: "Pendiente, intersecciones, y=mx+b",
+              icon: "trending-up-outline"
+            },
+            {
+              title: "Ecuaciones cuadráticas",
+              desc: "Parábolas, raíces y factorización",
+              icon: "analytics-outline"
+            },
+            {
+              title: "Trigonometría",
+              desc: "Seno, coseno y círculo unitario",
+              icon: "pulse-outline"
+            },
+            {
+              title: "Cálculo básico",
+              desc: "Límites, derivadas e integrales",
+              icon: "calculator-outline"
+            }
+          ].map((item, index) => (
+            <TouchableOpacity key={index} style={styles.card}>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Cálculo básico</Text>
-        <Text style={styles.cardSubtitle}>
-          Límites, derivadas, e integrales
-        </Text>
-      </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons
+                  name={item.icon as any}
+                  size={20}
+                  color={colors.primary}
+                  style={{ marginRight: 10 }}
+                />
+
+                <View>
+                  <Text style={styles.cardTitle}>{item.title}</Text>
+                  <Text style={styles.cardSubtitle}>{item.desc}</Text>
+                </View>
+              </View>
+
+            </TouchableOpacity>
+          ))}
+
+        </View>
+      </ScrollView>
 
     </View>
   );
