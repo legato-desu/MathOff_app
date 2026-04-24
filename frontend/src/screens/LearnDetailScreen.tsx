@@ -1,20 +1,34 @@
 import React from "react";
-import { View, Text, ScrollView, Image } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity
+} from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 import { learningData } from "../data/learningData";
 import { useTheme } from "../theme/ThemeContext";
 
 export default function LearnDetailScreen() {
   const route = useRoute();
+  const navigation = useNavigation();
   const { type } = route.params as any;
 
-  const { colors } = useTheme(); 
+  const { colors } = useTheme();
 
   const data = learningData[type];
 
   if (!data) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background, padding: 20 }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          padding: 20
+        }}
+      >
         <Text style={{ color: colors.text }}>
           No hay información
         </Text>
@@ -28,6 +42,15 @@ export default function LearnDetailScreen() {
       contentContainerStyle={{ padding: 20 }}
     >
 
+      {/* 🔹 BOTÓN DE REGRESO */}
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{ marginBottom: 15 }}
+      >
+        <Ionicons name="arrow-back" size={24} color={colors.text} />
+      </TouchableOpacity>
+
+      {/* 🔹 TÍTULO */}
       <Text
         style={{
           fontSize: 24,
@@ -46,7 +69,7 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12,
+            borderRadius: 12
           }}
           resizeMode="cover"
         />
@@ -59,7 +82,7 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12,
+            borderRadius: 12
           }}
           resizeMode="cover"
         />
@@ -72,7 +95,7 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12,
+            borderRadius: 12
           }}
           resizeMode="cover"
         />
@@ -85,21 +108,18 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12,
+            borderRadius: 12
           }}
           resizeMode="cover"
         />
       )}
 
-      <Text
-        style={{
-          marginTop: 15,
-          color: colors.text
-        }}
-      >
+      {/* 🔹 TEORÍA */}
+      <Text style={{ marginTop: 15, color: colors.text }}>
         {data.theory}
       </Text>
 
+      {/* 🔹 FÓRMULA */}
       <Text
         style={{
           marginTop: 15,
@@ -114,15 +134,12 @@ export default function LearnDetailScreen() {
         {data.formula}
       </Text>
 
-      <Text
-        style={{
-          marginTop: 15,
-          color: colors.text
-        }}
-      >
+      {/* 🔹 EXPLICACIÓN */}
+      <Text style={{ marginTop: 15, color: colors.text }}>
         {data.explanation}
       </Text>
 
+      {/* 🔹 EJEMPLO */}
       <Text
         style={{
           marginTop: 15,
@@ -137,6 +154,7 @@ export default function LearnDetailScreen() {
         {data.example}
       </Text>
 
+      {/* 🔹 VIDA REAL */}
       <Text
         style={{
           marginTop: 15,
@@ -151,6 +169,7 @@ export default function LearnDetailScreen() {
         {data.realLife}
       </Text>
 
+      {/* 🔹 TIP */}
       <Text
         style={{
           marginTop: 15,
