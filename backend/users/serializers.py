@@ -27,9 +27,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     role = serializers.StringRelatedField()
 
-class Meta:
-    model = User
-    fields = ["id", "username", "email", "role"]
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "role"]
 
 
 class RoleSerializer(serializers.ModelSerializer):
