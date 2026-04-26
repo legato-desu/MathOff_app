@@ -18,6 +18,7 @@ import { createStyles } from "../styles/graph.styles";
 
 import { evaluateExpression } from "../utils/math.utils";
 
+
 export default function GraphScreen() {
 
   const { colors } = useTheme();
@@ -137,9 +138,13 @@ export default function GraphScreen() {
   };
 
   return (
+    
+
+
     <View style={styles.container}>
 
       <Text style={styles.title}>Graficador</Text>
+
 
       <TextInput
         style={styles.input}
@@ -207,7 +212,7 @@ export default function GraphScreen() {
         onInput={handleInput}
         onDelete={handleDelete}
         onClear={handleClear}
-      />
+      />     
 
     </View>
   );

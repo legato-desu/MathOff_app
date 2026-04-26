@@ -120,6 +120,7 @@ export const changePasswordRequest = async (
     );
 
     const data = await response.json();
+    console.log("RESPUESTA LOGIN BACKEND:", data);
 
     console.log("CHANGE PASSWORD RESPONSE:", data);
 

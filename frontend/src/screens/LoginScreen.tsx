@@ -55,31 +55,23 @@ export default function LoginScreen() {
   }
 
   try {
-    console.log("1. Iniciando login...");
+  const data = await loginRequest(username, password);
 
-    const data = await loginRequest(username, password);
+  console.log("LOGIN DATA:", data);
+  console.log("ROLE:", data.user.role);
 
-    console.log("2. Login response:", data);
+  login(data.token, data.user);
 
-    // guardar Zustand
-    login(data.token, data.user);
-
-    console.log("3. Zustand guardado");
-
-    // guardar token manualmente
-    await AsyncStorage.setItem("accessToken", data.token);
-
-    console.log("4. Token guardado");
-
-    Alert.alert("Login correcto");
-
-  } catch (error: any) {
-    console.log("ERROR LOGIN SCREEN:", error);
-    Alert.alert(
-      "Error",
-      error.message || "Error al iniciar sesión"
-    );
+  if (remember) {
+    await AsyncStorage.setItem("username", username);
+  } else {
+    await AsyncStorage.removeItem("username");
   }
+
+} catch (error: any) {
+  Alert.alert("Error", error.message || "Error al iniciar sesión");
+}
+
 };
 
   // 🔁 CAMBIO A REGISTRO
