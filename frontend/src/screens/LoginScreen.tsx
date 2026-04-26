@@ -60,6 +60,7 @@ export default function LoginScreen() {
   console.log("LOGIN DATA:", data);
   console.log("ROLE:", data.user.role);
 
+  await AsyncStorage.setItem("accessToken", data.token); // 🔥 GUARDAR TOKEN
   login(data.token, data.user);
 
   if (remember) {

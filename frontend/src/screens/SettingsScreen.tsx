@@ -101,7 +101,6 @@ const handleShowRole = () => {
 
             <View>
               <Text style={styles.name}>{user?.username || "Usuario"}</Text>
-              <Text style={styles.plan}>Activo</Text>
             </View>
           </View>
 
@@ -136,13 +135,6 @@ const handleShowRole = () => {
             <View style={styles.rowLeft}>
               <Ionicons name="mail-outline" size={18} color={colors.primary} />
               <Text style={styles.item}>Correo electronico</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.row} onPress={handleShowRole}>
-            <View style={styles.rowLeft}>
-              <Ionicons name="shield-outline" size={18} color={colors.primary} />
-              <Text style={styles.item}>Rol</Text>
             </View>
           </TouchableOpacity>
 

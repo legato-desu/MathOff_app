@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+#rom rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User
@@ -13,6 +13,8 @@ from .serializers import (
     UserListSerializer,
     RoleSerializer
 )
+
+from .permissions import IsAdministrador
 
 # 🔐 REGISTRO
 class RegisterView(generics.CreateAPIView):
@@ -29,11 +31,11 @@ class CustomLoginView(TokenObtainPairView):
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdministrador]
 
 
 # 👑 ADMIN → LISTAR ROLES
 class RoleListView(generics.ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAdministrador]

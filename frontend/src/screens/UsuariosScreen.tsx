@@ -15,7 +15,7 @@ export default function UsuariosScreen() {
     const token = await AsyncStorage.getItem("accessToken");
 
     const response = await fetch(
-      "https://mathoff-app.onrender.com/api/users/",
+      "https://mathoff-app.onrender.com/api/",
       {
         headers: {
           Authorization: `Bearer ${token}`,

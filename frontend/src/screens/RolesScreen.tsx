@@ -17,7 +17,7 @@ export default function RolesScreen() {
       const token = await AsyncStorage.getItem("accessToken");
 
       const response = await fetch(
-        "https://mathoff-app.onrender.com/api/users/roles/",
+        "https://mathoff-app.onrender.com/api/roles/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,9 +64,9 @@ export default function RolesScreen() {
               marginBottom: 10,
             }}
           >
-            <Text style={{ color: colors.text, fontWeight: "bold" }}>
+            <Text style={{ color: colors.text }}>
               {role.nombre}
-            </Text>
+              </Text>
           </View>
         ))
       )}

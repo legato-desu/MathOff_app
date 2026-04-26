@@ -39,11 +39,6 @@ export default function HomeScreen() {
 
           <View style={styles.overlay} />
 
-          <View style={styles.functionBox}>
-            <Text style={styles.functionText}>
-              f(x) = sin(x) · e^(-x/5)
-            </Text>
-          </View>
         </LinearGradient>
       </TouchableOpacity>
 

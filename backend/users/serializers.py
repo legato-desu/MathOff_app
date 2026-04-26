@@ -24,6 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             role=validated_data.get("role")
         )
         return user
+    
 class UserListSerializer(serializers.ModelSerializer):
     role = serializers.StringRelatedField()
 
@@ -31,8 +32,7 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "email", "role"]
 
-
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
-        fields = ["id", "nombre", "descripcion"]
+        fields = ["id", "nombre"]
