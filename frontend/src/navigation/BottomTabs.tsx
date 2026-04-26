@@ -9,6 +9,7 @@ import GraphScreen from "../screens/GraphScreen";
 import ScanScreen from "../screens/ScanScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,6 +39,9 @@ export default function BottomTabs() {
             iconName = focused ? "stats-chart" : "stats-chart-outline";
           } else if (route.name === "Opciones") {
             iconName = focused ? "settings" : "settings-outline";
+          }
+            else if (route.name === "Perfil") {
+            iconName = focused ? "person" : "person-outline";
           }
 
           return <Ionicons name={iconName} size={22} color={color} />;
@@ -71,8 +75,11 @@ export default function BottomTabs() {
       {/* 🔹 GRÁFICO */}
       <Tab.Screen name="Grafico" component={GraphScreen} />
 
+      <Tab.Screen name="Perfil" component={ProfileScreen} />
+      
       {/* 🔹 OPCIONES */}
       <Tab.Screen name="Opciones" component={SettingsScreen} />
+
 
     </Tab.Navigator>
   );

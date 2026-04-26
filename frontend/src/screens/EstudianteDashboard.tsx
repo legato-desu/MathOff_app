@@ -1,99 +1,50 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
+  View, Text, TextInput, TouchableOpacity, Alert, ScrollView
 } from "react-native";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "../theme/ThemeContext";
 
 export default function EstudianteDashboard() {
+  const { colors } = useTheme();
+
   const [ejercicios, setEjercicios] = useState<any[]>([]);
-  const [respuesta, setRespuesta] = useState("");
+  const [respuestas, setRespuestas] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
     cargarEjercicios();
   }, []);
 
   const cargarEjercicios = async () => {
-    try {
-      const token = await AsyncStorage.getItem("accessToken");
+    const token = await AsyncStorage.getItem("accessToken");
 
-      console.log("TOKEN:", token);
+    const response = await fetch(
+      "https://mathoff-app.onrender.com/api/ejercicios/",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+      
+    );
 
-      const response = await fetch(
-        "https://mathoff-app.onrender.com/api/ejercicios/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // TEMPORAL DEBUG
-      const text = await response.text();
-      console.log("RESPUESTA BACKEND:", text);
-
-      // IMPORTANTE:
-      // NO usamos response.json() aquí todavía,
-      // porque primero queremos ver qué devuelve Django
-
-    } catch (error) {
-      console.log("ERROR CARGAR EJERCICIOS:", error);
-    }
+    const data = await response.json();
+    setEjercicios(data);
   };
 
-  const enviarRespuesta = async (ejercicioId: number) => {
-    try {
-      const token = await AsyncStorage.getItem("accessToken");
-
-      console.log("TOKEN RESPUESTA:", token);
-
-      const response = await fetch(
-        "https://mathoff-app.onrender.com/api/respuestas/crear/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ejercicio: ejercicioId,
-            respuesta_usuario: respuesta,
-          }),
-        }
-      );
-
-      const text = await response.text();
-      console.log("RESPUESTA ENVIAR:", text);
-
-      if (!response.ok) {
-        throw new Error("No se pudo enviar");
-      }
-
-      Alert.alert("Éxito", "Respuesta enviada correctamente");
-
-      setRespuesta("");
-
-    } catch (error: any) {
-      console.log("ERROR ENVIAR:", error);
-      Alert.alert("Error", error.message);
+  const enviarRespuesta = (id: number) => {
+    if (!respuestas[id]) {
+      Alert.alert("Error", "Escribe una respuesta");
+      return;
     }
+
+    Alert.alert("Respuesta enviada");
+    setRespuestas((prev) => ({ ...prev, [id]: "" }));
   };
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: "bold",
-          marginBottom: 20,
-        }}
-      >
+    <ScrollView 
+    style={{ flex: 1, backgroundColor: colors.background }}
+    contentContainerStyle={{ padding: 20, backgroundColor: colors.background }}>
+      <Text style={{ fontSize: 26, fontWeight: "bold", marginBottom: 20, color: colors.text }}>
         Panel de Estudiante
       </Text>
 
@@ -102,40 +53,50 @@ export default function EstudianteDashboard() {
           key={item.id}
           style={{
             borderWidth: 1,
-            padding: 15,
+            borderColor: colors.border,
+            borderRadius: 14,
+            padding: 16,
             marginBottom: 20,
-            borderRadius: 10,
+            backgroundColor: colors.card,
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>
+          {ejercicios.length === 0 && (
+  <Text style={{ color: colors.textMuted }}>
+    No hay ejercicios disponibles
+  </Text>
+)}
+          <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10, color: colors.text }}>
             {item.titulo}
           </Text>
 
-          <Text style={{ marginVertical: 10 }}>
+          <Text style={{ marginBottom: 15, color: colors.textSecondary }}>
             {item.descripcion}
           </Text>
 
           <TextInput
             placeholder="Escribe tu respuesta"
-            value={respuesta}
-            onChangeText={setRespuesta}
+            placeholderTextColor={colors.textMuted}
             style={{
               borderWidth: 1,
-              padding: 10,
+              borderColor: colors.border,
               borderRadius: 10,
-              marginBottom: 10,
+              padding: 12,
+              marginBottom: 12,
+              backgroundColor: colors.surface,
+              color: colors.text,
             }}
           />
 
           <TouchableOpacity
             onPress={() => enviarRespuesta(item.id)}
             style={{
-              backgroundColor: "#1976D2",
-              padding: 12,
+              backgroundColor: colors.primary,
+              padding: 14,
               borderRadius: 10,
+              alignItems: "center",
             }}
           >
-            <Text style={{ color: "white" }}>
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>
               Enviar Respuesta
             </Text>
           </TouchableOpacity>
