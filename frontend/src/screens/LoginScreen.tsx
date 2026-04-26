@@ -49,32 +49,38 @@ export default function LoginScreen() {
   }, []);
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert("Error", "Completa todos los campos");
-      return;
-    }
+  if (!username || !password) {
+    Alert.alert("Error", "Completa todos los campos");
+    return;
+  }
 
-    try {
-      const data = await loginRequest(username, password);
+  try {
+    console.log("1. Iniciando login...");
 
-      // 🔐 Guardar en Zustand
-      login(data.token, data.user);
+    const data = await loginRequest(username, password);
 
-      // guardar token real
-      await AsyncStorage.setItem("accessToken", data.token);
+    console.log("2. Login response:", data);
 
-      // 💾 Recordar usuario
-      if (remember) {
-        await AsyncStorage.setItem("username", username);
-      } else {
-        await AsyncStorage.removeItem("username");
-      }
+    // guardar Zustand
+    login(data.token, data.user);
 
+    console.log("3. Zustand guardado");
 
-    } catch (error: any) {
-      Alert.alert("Error", error.message || "Error al iniciar sesión");
-    }
-  };
+    // guardar token manualmente
+    await AsyncStorage.setItem("accessToken", data.token);
+
+    console.log("4. Token guardado");
+
+    Alert.alert("Login correcto");
+
+  } catch (error: any) {
+    console.log("ERROR LOGIN SCREEN:", error);
+    Alert.alert(
+      "Error",
+      error.message || "Error al iniciar sesión"
+    );
+  }
+};
 
   // 🔁 CAMBIO A REGISTRO
   if (isRegistering) {
