@@ -1,10 +1,7 @@
 from django.urls import path
-from .views import (
-    ListaEjerciciosView,
-    CrearEjercicioView
-)
+from .views import CrearEjercicioView, ListarEjerciciosView
 
 urlpatterns = [
-    path("", ListaEjerciciosView.as_view(), name="lista_ejercicios"),
+    path("", ListarEjerciciosView.as_view(), name="listar_ejercicios"),
     path("crear/", CrearEjercicioView.as_view(), name="crear_ejercicio"),
 ]
