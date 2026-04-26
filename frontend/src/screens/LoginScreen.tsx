@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { Ionicons } from "@expo/vector-icons";
 
-
 import {
   View,
   Text,
@@ -22,6 +21,7 @@ import { loginRequest } from "../servicios/api";
 import { useAuthStore } from "../store/authStore";
 
 import RegisterScreen from "./RegisterScreen";
+
 
 export default function LoginScreen() {
   const { colors } = useTheme();
