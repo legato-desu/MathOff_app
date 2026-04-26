@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from roles.models import Role
 
-
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     role = models.ForeignKey(
