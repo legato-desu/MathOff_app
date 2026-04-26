@@ -7,7 +7,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
 
         data["username"] = self.user.username
-        data["role"] = "Estudiante"
+
+        # 🔥 AQUÍ está la solución
+        if hasattr(self.user, "role") and self.user.role:
+            data["role"] = self.user.role.nombre
+        else:
+            data["role"] = None
 
         return data
 """
