@@ -5,6 +5,12 @@ from .models import Ejercicio
 from .serializers import EjercicioSerializer
 
 
+class ListaEjerciciosView(generics.ListAPIView):
+    queryset = Ejercicio.objects.all()
+    serializer_class = EjercicioSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class CrearEjercicioView(generics.CreateAPIView):
     queryset = Ejercicio.objects.all()
     serializer_class = EjercicioSerializer

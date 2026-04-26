@@ -24,7 +24,7 @@ export default function ProfesorDashboard() {
     console.log("TOKEN:", token);
 
     const response = await fetch(
-      "http://127.0.0.1:8000/api/ejercicios/crear/",
+      "https://mathoff-app.onrender.com/api/ejercicios/crear/",
       {
         method: "POST",
         headers: {
