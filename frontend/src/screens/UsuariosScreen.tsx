@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "../theme/ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function UsuariosScreen() {
   const { colors } = useTheme();
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    fetchUsers();
+    cargarUsuarios();
   }, []);
 
-  const fetchUsers = async () => {
+  const cargarUsuarios = async () => {
     const token = await AsyncStorage.getItem("accessToken");
 
     const response = await fetch(
@@ -24,12 +24,16 @@ export default function UsuariosScreen() {
     );
 
     const data = await response.json();
-    setUsers(data);
+
+    if (Array.isArray(data)) {
+      setUsers(data);
+    } else {
+      console.log("ERROR USERS:", data);
+    }
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.background }}
-  contentContainerStyle={{ padding: 20 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: colors.background, padding: 20 }}>
       <Text style={{ color: colors.text, fontSize: 22, marginBottom: 20 }}>
         Usuarios
       </Text>
@@ -44,7 +48,7 @@ export default function UsuariosScreen() {
             marginBottom: 10,
           }}
         >
-          <Text style={{ color: colors.text }}>
+          <Text style={{ color: colors.text, fontWeight: "bold" }}>
             {user.username}
           </Text>
 
@@ -53,7 +57,7 @@ export default function UsuariosScreen() {
           </Text>
 
           <Text style={{ color: colors.primary }}>
-            {user.role}
+            {user.role || "Sin rol"}
           </Text>
         </View>
       ))}
