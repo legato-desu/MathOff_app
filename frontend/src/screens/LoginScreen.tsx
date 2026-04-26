@@ -60,6 +60,9 @@ export default function LoginScreen() {
       // 🔐 Guardar en Zustand
       login(data.token, data.user);
 
+      // guardar token real
+      await AsyncStorage.setItem("accessToken", data.token);
+
       // 💾 Recordar usuario
       if (remember) {
         await AsyncStorage.setItem("username", username);
