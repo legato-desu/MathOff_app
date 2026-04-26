@@ -6,7 +6,7 @@ from users.views import CustomLoginView
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-    path("api/users/", include("users.urls")),
+    path("api/", include("users.urls")),
     path("api/ejercicios/", include("ejercicios.urls")),
     path("api/respuestas/", include("respuestas.urls")),
 
