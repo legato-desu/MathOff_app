@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
       <TouchableOpacity activeOpacity={0.85} onPress={goToGraph}>
         <LinearGradient
-          colors={gradientColors as [string, string]} // 👈 FIX TS
+          colors={gradientColors as [string, string]}
           style={styles.heroCard}
         >
           <Image

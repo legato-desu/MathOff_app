@@ -49,9 +49,8 @@ export default function BottomTabs() {
       })}
     >
 
-      {/* 🔹 INICIO (antes Librería) */}
 <Tab.Screen name="Inicio" component={HomeScreen} />
-      {/* 🔹 ESCÁNER */}
+
       <Tab.Screen 
         name="Escaner" 
         component={ScanScreen}
@@ -59,27 +58,24 @@ export default function BottomTabs() {
           tabBarIcon: () => (
             <View style={{
               backgroundColor: colors.primary,
-              width: 60,
-              height: 60,
-              borderRadius: 30,
+              width: 50,
+              height: 50,
+              borderRadius: 40,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 30
             }}>
-              <Ionicons name="scan" size={28} color={colors.background}/>
+              <Ionicons name="scan" size={30} color={colors.background}/>
             </View>
           )
         }}
       />
 
-      {/* 🔹 GRÁFICO */}
       <Tab.Screen name="Grafico" component={GraphScreen} />
 
       <Tab.Screen name="Perfil" component={ProfileScreen} />
       
-      {/* 🔹 OPCIONES */}
       <Tab.Screen name="Opciones" component={SettingsScreen} />
-
 
     </Tab.Navigator>
   );

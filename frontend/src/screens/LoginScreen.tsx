@@ -57,10 +57,7 @@ export default function LoginScreen() {
   try {
   const data = await loginRequest(username, password);
 
-  console.log("LOGIN DATA:", data);
-  console.log("ROLE:", data.user.role);
-
-  await AsyncStorage.setItem("accessToken", data.token); // 🔥 GUARDAR TOKEN
+  await AsyncStorage.setItem("accessToken", data.token);
   login(data.token, data.user);
 
   if (remember) {
@@ -75,7 +72,6 @@ export default function LoginScreen() {
 
 };
 
-  // 🔁 CAMBIO A REGISTRO
   if (isRegistering) {
     return (
       <RegisterScreen
@@ -94,7 +90,6 @@ export default function LoginScreen() {
 
       <Text style={styles.title}>MathOff</Text>
 
-      {/* 👤 USERNAME */}
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -106,7 +101,6 @@ export default function LoginScreen() {
         />
       </View>
 
-      {/* 🔒 PASSWORD */}
       <View style={styles.inputContainer}>
         <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
 
@@ -128,7 +122,6 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* ✅ RECORDARME */}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 15 }}>
         <TouchableOpacity onPress={() => setRemember(!remember)}>
           <Ionicons
@@ -142,12 +135,10 @@ export default function LoginScreen() {
         </Text>
       </View>
 
-      {/* 🚀 LOGIN */}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>INICIAR</Text>
       </TouchableOpacity>
 
-      {/* 🔗 REGISTRO */}
       <Text style={styles.footer}>
         No tienes cuenta?{" "}
         <Text

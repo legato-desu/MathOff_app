@@ -51,7 +51,6 @@ export default function RegisterScreen({ onBack }: Props) {
 
       <Text style={styles.title}>Crear cuenta</Text>
 
-      {/* 👤 USERNAME */}
       <View style={styles.inputContainer}>
         <Ionicons name="person-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -63,7 +62,6 @@ export default function RegisterScreen({ onBack }: Props) {
         />
       </View>
 
-      {/* 📧 EMAIL */}
       <View style={styles.inputContainer}>
         <Ionicons name="mail-outline" size={18} color={colors.textSecondary} />
         <TextInput
@@ -76,7 +74,6 @@ export default function RegisterScreen({ onBack }: Props) {
         />
       </View>
 
-      {/* 🔒 PASSWORD */}
       <View style={styles.inputContainer}>
         <Ionicons name="lock-closed-outline" size={18} color={colors.textSecondary} />
 
@@ -98,12 +95,10 @@ export default function RegisterScreen({ onBack }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* 🔥 BOTÓN REGISTRAR */}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>REGISTRAR</Text>
       </TouchableOpacity>
 
-      {/* 🔙 VOLVER */}
       <TouchableOpacity onPress={onBack}>
         <Text style={styles.link}>
           Volver al login

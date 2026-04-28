@@ -1,5 +1,3 @@
-// src/utils/math.utils.ts
-
 export const parseExpression = (expr: string): string => {
   let parsed = expr;
 

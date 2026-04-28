@@ -31,7 +31,6 @@ export default function GraphScreen() {
   const [functions, setFunctions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // 🔥 ANIMACIÓN SHAKE
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
   const triggerShake = () => {
@@ -43,14 +42,12 @@ export default function GraphScreen() {
     ]).start();
   };
 
-  // ✅ TODOS LOS HOOKS ARRIBA (regla de oro)
   useEffect(() => {
     if (!token) {
       openLogin();
     }
   }, [token]);
 
-  // 🔒 BLOQUEO UI (después de hooks)
   if (!token) {
     return (
       <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
@@ -80,8 +77,6 @@ export default function GraphScreen() {
       </View>
     );
   }
-
-  // 🔢 FUNCIONES
 
   const getRandomColor = () => {
     const palette = [
@@ -139,12 +134,9 @@ export default function GraphScreen() {
 
   return (
     
-
-
     <View style={styles.container}>
 
       <Text style={styles.title}>Graficador</Text>
-
 
       <TextInput
         style={styles.input}

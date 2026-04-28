@@ -2,11 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API_URL = "https://mathoff-app.onrender.com/api";
 
-console.log("API:", API_URL);
-
-//
-// 🔐 LOGIN
-//
 export const loginRequest = async (
   username: string,
   password: string
@@ -25,15 +20,12 @@ export const loginRequest = async (
 
     const data = await response.json();
 
-    console.log("LOGIN RESPONSE:", data);
-
     if (!response.ok) {
       throw new Error(
         data.detail || "Error al iniciar sesión"
       );
     }
 
-    // guardar tokens
     await AsyncStorage.setItem("accessToken", data.access);
     await AsyncStorage.setItem("refreshToken", data.refresh);
 
@@ -52,9 +44,6 @@ export const loginRequest = async (
   }
 };
 
-//
-// 🟢 REGISTER
-//
 export const registerRequest = async (
   username: string,
   email: string,
@@ -78,8 +67,6 @@ export const registerRequest = async (
 
     const data = await response.json();
 
-    console.log("REGISTER RESPONSE:", data);
-
     if (!response.ok) {
       throw new Error(
         data.detail || "Error en registro"
@@ -94,9 +81,6 @@ export const registerRequest = async (
   }
 };
 
-//
-// 🔐 CAMBIAR CONTRASEÑA
-//
 export const changePasswordRequest = async (
   currentPassword: string,
   newPassword: string

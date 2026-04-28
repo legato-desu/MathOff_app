@@ -13,7 +13,6 @@ import SavedGraphCard from "../components/SavedGraphCard";
 import { useTheme } from "../theme/ThemeContext";
 import { getStyles } from "../styles/library.styles";
 
-// 🔹 FIX SIMPLE DE TYPESCRIPT
 type NavigationProp = NativeStackNavigationProp<any>;
 
 export default function LibraryScreen() {
@@ -21,7 +20,6 @@ export default function LibraryScreen() {
   const { colors } = useTheme();
   const styles = getStyles(colors);
 
-  // 🔹 navigation tipado (sin tocar navigator)
   const navigation = useNavigation<NavigationProp>();
 
   const learningItems = [
@@ -54,7 +52,6 @@ export default function LibraryScreen() {
   return (
     <View style={styles.container}>
 
-      {/* 🔹 HEADER */}
       <View style={styles.content}>
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -67,19 +64,16 @@ export default function LibraryScreen() {
         </View>
       </View>
 
-      {/* 🔹 SCROLL */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
 
-          {/* 🔹 TABS */}
           <View style={styles.tabsContainer}>
             <Text style={styles.activeTab}>Historial</Text>
           </View>
 
-          {/* 🔹 GRÁFICOS */}
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Gráficos Guardados</Text>
             <Text style={styles.viewAll}>Ver todos</Text>
@@ -90,7 +84,6 @@ export default function LibraryScreen() {
             <SavedGraphCard title="y = sin(x)" />
           </ScrollView>
 
-          {/* 🔹 APRENDIZAJE */}
           <Text style={styles.quickLearnTitle}>
             Aprendizaje rápido
           </Text>

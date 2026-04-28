@@ -42,7 +42,6 @@ export default function LearnDetailScreen() {
       contentContainerStyle={{ padding: 20 }}
     >
 
-      {/* 🔹 BOTÓN DE REGRESO */}
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={{ marginBottom: 15 }}
@@ -50,7 +49,6 @@ export default function LearnDetailScreen() {
         <Ionicons name="arrow-back" size={24} color={colors.text} />
       </TouchableOpacity>
 
-      {/* 🔹 TÍTULO */}
       <Text
         style={{
           fontSize: 24,
@@ -61,7 +59,6 @@ export default function LearnDetailScreen() {
         {data.title}
       </Text>
 
-      {/* 🔹 IMAGEN SEGÚN EL TIPO */}
       {type === "lineal" && (
         <Image
           source={require("../../assets/lineal.png")}
@@ -114,12 +111,10 @@ export default function LearnDetailScreen() {
         />
       )}
 
-      {/* 🔹 TEORÍA */}
       <Text style={{ marginTop: 15, color: colors.text }}>
         {data.theory}
       </Text>
 
-      {/* 🔹 FÓRMULA */}
       <Text
         style={{
           marginTop: 15,
@@ -134,12 +129,10 @@ export default function LearnDetailScreen() {
         {data.formula}
       </Text>
 
-      {/* 🔹 EXPLICACIÓN */}
       <Text style={{ marginTop: 15, color: colors.text }}>
         {data.explanation}
       </Text>
 
-      {/* 🔹 EJEMPLO */}
       <Text
         style={{
           marginTop: 15,
@@ -154,7 +147,6 @@ export default function LearnDetailScreen() {
         {data.example}
       </Text>
 
-      {/* 🔹 VIDA REAL */}
       <Text
         style={{
           marginTop: 15,
@@ -169,7 +161,6 @@ export default function LearnDetailScreen() {
         {data.realLife}
       </Text>
 
-      {/* 🔹 TIP */}
       <Text
         style={{
           marginTop: 15,

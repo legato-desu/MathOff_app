@@ -26,7 +26,6 @@ export default function AuthModal() {
         }}
       >
 
-        {/* ❌ BOTÓN CERRAR */}
         <TouchableOpacity
           onPress={closeLogin}
           style={{
@@ -39,7 +38,6 @@ export default function AuthModal() {
           <Ionicons name="close" size={28} color="white" />
         </TouchableOpacity>
 
-        {/* ✅ CONTENEDOR CORRECTO */}
         <View
           style={{
             width: "90%",
