@@ -3,10 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { useTheme } from "../theme/ThemeContext";
+import { createStyles } from "../styles/graph.styles";
+
 import { useAuthStore } from "../store/authStore";
 
 export default function ScanScreen() {
   const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   const token = useAuthStore((state) => state.token);
   const openLogin = useAuthStore((state) => state.openLogin);
@@ -18,7 +21,7 @@ export default function ScanScreen() {
     if (!token) {
       openLogin();
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (token && !permission?.granted) {
@@ -50,6 +53,7 @@ export default function ScanScreen() {
         >
           <Text style={{ color: colors.white }}>Iniciar sesión</Text>
         </TouchableOpacity>
+
       </View>
     );
   }
