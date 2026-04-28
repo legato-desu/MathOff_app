@@ -5,7 +5,7 @@ interface Styles {
   header: ViewStyle;
   logo: TextStyle;
   heroCard: ViewStyle;
-  heroImage: ImageStyle; // 👈 IMPORTANTE
+  heroImage: ImageStyle;
   overlay: ViewStyle;
   functionBox: ViewStyle;
   functionText: TextStyle;

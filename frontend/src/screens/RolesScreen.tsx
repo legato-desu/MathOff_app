@@ -30,7 +30,6 @@ export default function RolesScreen() {
 
       const data = JSON.parse(text);
 
-      // 🔥 VALIDACIÓN CLAVE
       if (!Array.isArray(data)) {
         console.log("ERROR: No es array", data);
         return;

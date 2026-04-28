@@ -50,10 +50,8 @@ export default function MainNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       
-      {/* 🔥 SIEMPRE EXISTEN LOS TABS */}
       <Stack.Screen name="Tabs" component={BottomTabs} />
 
-      {/* 🔥 PANTALLAS SECUNDARIAS */}
       <Stack.Screen name="Usuarios" component={UsuariosScreen} />
       <Stack.Screen name="Roles" component={RolesScreen} />
       <Stack.Screen name="Reportes" component={ReportesScreen} />

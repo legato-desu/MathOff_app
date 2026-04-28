@@ -19,7 +19,6 @@ export default function ProfileScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
 
-      {/* 🔷 HEADER */}
       <View
         style={{
           backgroundColor: colors.card,
@@ -61,7 +60,6 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* 🔷 CONTENIDO SEGÚN ROL */}
       <View style={{ flex: 1 }}>
         {user?.role === "Administrador" && <AdminDashboard />}
         {user?.role === "Docente" && <ProfesorDashboard />}
