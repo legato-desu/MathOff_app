@@ -9,6 +9,7 @@ import { getRoleStyles  } from "../styles/roles.Styles"
 import AdminDashboard from "./AdminDashboard";
 import ProfesorDashboard from "./ProfesorDashboard";
 import EstudianteDashboard from "./EstudianteDashboard";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
@@ -21,7 +22,7 @@ export default function ProfileScreen() {
 }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
 
       <View
         style={{
@@ -70,6 +71,6 @@ export default function ProfileScreen() {
         {user?.role === "Estudiante" && <EstudianteDashboard />}
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 }

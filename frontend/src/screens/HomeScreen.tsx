@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../theme/ThemeContext";
 import createStyles from "../styles/home.styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
@@ -20,7 +21,7 @@ export default function HomeScreen() {
     : ["#EAF6FF", "#FFFFFF"];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
       <View style={styles.header}>
         <Text style={styles.logo}>✦ MathOff</Text>
@@ -60,6 +61,6 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 }

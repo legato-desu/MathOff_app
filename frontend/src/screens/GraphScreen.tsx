@@ -17,6 +17,7 @@ import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/graph.styles";
 
 import { evaluateExpression } from "../utils/math.utils";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function GraphScreen() {
@@ -134,7 +135,7 @@ export default function GraphScreen() {
 
   return (
     
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
       <Text style={styles.title}>Graficador</Text>
 
@@ -206,6 +207,6 @@ export default function GraphScreen() {
         onClear={handleClear}
       />     
 
-    </View>
+</SafeAreaView>
   );
 }

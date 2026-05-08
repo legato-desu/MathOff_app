@@ -4,6 +4,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { useTheme } from "../theme/ThemeContext";
 import { useAuthStore } from "../store/authStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ScanScreen() {
   const { colors } = useTheme();
@@ -70,7 +71,7 @@ export default function ScanScreen() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <CameraView ref={cameraRef} style={{ flex: 1 }} />
       <TouchableOpacity
         onPress={handleCapture}
@@ -78,7 +79,7 @@ export default function ScanScreen() {
       >
         <Text style={{ color: colors.white }}>📸</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
