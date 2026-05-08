@@ -31,7 +31,6 @@ export default function ScanScreen() {
       try {
         const photo = await cameraRef.current.takePictureAsync();
         console.log("Foto tomada:", photo.uri);
-        // Aquí puedes guardar la foto, enviarla al backend, etc.
       } catch (e) {
         console.log("Error al tomar foto", e);
       }

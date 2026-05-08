@@ -1,66 +1,184 @@
 # 🧠 MathOff App
 
-Aplicación móvil desarrollada con **React Native (Expo)** para resolver, graficar y trabajar con funciones matemáticas.
-Incluye autenticación real, escaneo de ecuaciones y graficación interactiva.
+Aplicación móvil desarrollada con **React Native (Expo)** y **Django REST Framework** orientada al aprendizaje matemático, resolución de ejercicios, graficación de funciones y autenticación segura mediante JWT.
+
+La aplicación integra control de acceso basado en roles, persistencia de sesión, navegación protegida y comunicación en tiempo real con un backend desplegado en la nube.
 
 ---
 
-## 🚀 Tecnologías utilizadas
+# 🚀 Tecnologías utilizadas
 
-### 📱 Frontend
+## 📱 Frontend
 
-* React Native (Expo)
-* TypeScript
-* Zustand (manejo de estado global)
-* React Navigation
-* Expo Camera
-
-### 🖥️ Backend
-
-* Node.js
-* Express
-* JWT (autenticación)
-* bcrypt (encriptación)
-
-### ☁️ Infraestructura
-
-* Render (deploy backend)
-* PostgreSQL (base de datos en la nube)
+- React Native (Expo)
+- TypeScript
+- Zustand (manejo de estado global)
+- React Navigation
+- AsyncStorage
+- Expo Camera
+- Expo Vector Icons
 
 ---
 
-## 🔐 Funcionalidades principales
+## 🖥️ Backend
 
-* Registro de usuarios
-* Login con autenticación JWT
-* Encriptación segura de contraseñas
-* Protección de rutas (login requerido para funciones clave)
-* Modal de autenticación dinámico
-* Graficador de funciones matemáticas
-* Escáner de ecuaciones con cámara
-* Biblioteca de funciones
-* Tema claro / oscuro
+- Python
+- Django
+- Django REST Framework
+- SimpleJWT
+- PostgreSQL
+- CORS Headers
 
 ---
 
-## 🧠 Flujo de la app
+## ☁️ Infraestructura y Deploy
 
-* La app inicia en **Inicio (informativo)**
-* Funciones como **Escáner y Gráfico requieren login**
-* Si el usuario no está autenticado:
+- Render (Backend + PostgreSQL)
+- PostgreSQL Cloud Database
+- GitHub
 
-  * Se abre un modal de login
-  * Se bloquea el acceso a funcionalidades
+---
+
+# 🔐 Sistema de autenticación y autorización
+
+La aplicación implementa un sistema completo de autenticación basado en JWT (JSON Web Tokens).
+
+## Características implementadas
+
+- Login mediante credenciales
+- Registro de usuarios
+- Recepción de Access Token y Refresh Token
+- Persistencia de sesión con AsyncStorage
+- Manejo de estado global con Zustand
+- Renovación automática de tokens (Refresh Token)
+- Logout seguro
+- Protección de rutas restringidas
+- Control de acceso basado en roles
+- Middleware JWT en backend
+- Guards de navegación en frontend
+
+---
+
+# 👥 Roles del sistema
+
+El sistema cuenta con autorización basada en roles almacenados en la base de datos.
+
+## Roles disponibles
+
+- Administrador
+- Docente
+- Estudiante
+
+Cada rol posee acceso diferenciado dentro de la aplicación.
+
+---
+
+# 🔐 Protección de vistas
+
+Las vistas protegidas validan:
+
+- Estado de autenticación
+- Token válido
+- Permisos según rol
+- Persistencia de sesión
+
+---
+
+# 📚 Funcionalidades principales
+
+## 📖 Académicas
+
+- Biblioteca de contenido matemático
+- Graficador de funciones
+- Escaneo de ecuaciones
+- Resolución de ejercicios
+- Gestión de respuestas
+
+---
+
+## 👤 Usuario
+
+- Registro de usuarios
+- Inicio de sesión
+- Cambio de contraseña
+- Persistencia automática de sesión
+- Perfil dinámico según rol
+
+---
+
+## 👑 Administración
+
+- Gestión de usuarios
+- Gestión de roles
+- Reportes
+- Control administrativo
+
+---
+
+# 🧠 Flujo de autenticación
+
+```text
+Usuario inicia sesión
+→ Backend valida credenciales
+→ Django genera JWT
+→ Frontend recibe tokens
+→ Zustand almacena sesión
+→ AsyncStorage persiste datos
+→ Navegación protegida habilitada
+
+---
+
+# 🔄 Persistencia de sesión
+
+La sesión permanece activa incluso al cerrar la aplicación.
+
+Implementación
+AsyncStorage para almacenamiento local
+Zustand Persist Middleware
+Recuperación automática de sesión
+Validación de token JWT
+Renovación automática mediante Refresh Token
+
+---
+
+⚠️ Manejo de errores implementado
+Backend
+401 Unauthorized
+403 Forbidden
+Validación JWT
+Middleware de autenticación
+Frontend
+Logout automático por token inválido
+Redirección a login
+Mensajes de error controlados
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
+
 MathOff_app/
 
-├── frontend/    # App móvil (Expo)
-└── backend/     # API REST (Node + Express)
+├── backend/
+│   ├── config/
+│   ├── ejercicios/
+│   ├── reportes/
+│   ├── respuestas/
+│   ├── roles/
+│   ├── tareas/
+│   └── users/
+│
+└── frontend/
+    ├── assets/
+    ├── src/
+    │   ├── components/
+    │   ├── navigation/
+    │   ├── screens/
+    │   ├── servicios/
+    │   ├── store/
+    │   ├── styles/
+    │   └── theme/
 ```
 
 ---
@@ -84,7 +202,7 @@ cd MathOff_app
 
 ```
 cd backend
-npm install
+pip install -r requirements.txt
 ```
 
 ### 3. Configurar variables de entorno
@@ -92,34 +210,39 @@ npm install
 Crear archivo `.env`:
 
 ```
-PORT=3000
+SECRET_KEY=tu_secret_key
+DEBUG=True
 
-DB_HOST=tu_host_render
-DB_USER=tu_usuario
-DB_PASSWORD=tu_password
-DB_NAME=tu_database
-DB_PORT=5432
-
-JWT_SECRET=tu_secreto
+DATABASE_URL=tu_database_url_render
 ```
 
 ---
 
-### 4. Ejecutar backend (modo local)
+### 4. Ejecutar migraciones
 
 ```
-npm run dev
+python manage.py migrate
 ```
 
 ---
 
-### 🌐 Deploy
+### 5. Ejecutar servidor
 
-El backend está pensado para desplegarse en:
-
-👉 Render
+```
+python manage.py runserver
+```
 
 ---
+# 🌐 Endpoints JWT
+Login
+```
+POST /api/token/
+```
+Refresh Token
+```
+POST /api/token/refresh/
+```
+
 
 ## 📱 Frontend
 
@@ -132,7 +255,7 @@ npm install
 
 ---
 
-### 6. Configurar API
+### 6. Configurar URL API
 
 Editar:
 
@@ -140,10 +263,8 @@ Editar:
 src/servicios/api.ts
 ```
 
-Colocar la URL de tu backend en Render:
-
 ```
-const API_URL = "https://tu-backend.onrender.com/api";
+const API_URL = "https://mathoff-app.onrender.com/api";
 ```
 
 ---
@@ -154,22 +275,15 @@ const API_URL = "https://tu-backend.onrender.com/api";
 npx expo start
 ```
 
-Escanea el QR con Expo Go 📱
-
----
-
-## ⚠️ Notas importantes
-
-* El backend debe estar desplegado o corriendo
-* La API debe apuntar a Render (no localhost en producción)
-* Las variables `.env` no están incluidas
-* PostgreSQL reemplaza completamente MySQL/XAMPP
+☁️ Deploy
+Backend desplegado en Render
+API REST desplegada en Render
+PostgreSQL Cloud Database
+Variables de entorno protegidas
 
 ---
 
 ## 🧪 Usuario de prueba
-
-Puedes crear uno desde la app o usar:
 
 ```
 usuario: test
@@ -180,15 +294,17 @@ password: 1234
 
 ## 📌 Futuras mejoras
 
-* Persistencia de sesión (auto login)
+* OCR matemático avanzado
 * Login con Google
-* OCR real para escaneo matemático
-* Guardado de historial de funciones
-* Mejoras UI/UX (animaciones, transición, etc.)
+* Historial de ejercicios
+* Notificaciones push
+* Estadísticas académicas
+* Sistema de tareas
+* Exportación de reportes PDF
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 Desarrollado por
 * **Ivan Miranda**
