@@ -4,11 +4,9 @@ import {
   Text,
   TouchableOpacity,
   Switch,
-  Alert,
   Modal,
   TextInput,
   ScrollView,
-  Platform,
   TouchableWithoutFeedback,
 } from "react-native";
 
@@ -19,6 +17,7 @@ import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/settings.styles";
 import { useAuthStore } from "../store/authStore";
 import { changePasswordRequest } from "../servicios/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const { isDark, toggleTheme, colors } = useTheme();
@@ -27,37 +26,50 @@ export default function SettingsScreen() {
   const navigation = useNavigation();
   const { logout, user } = useAuthStore();
 
-  const [notifications, setNotifications] = useState(false);
-  const [language, setLanguage] = useState("ES");
+  const [notifications, setNotifications] =
+    useState(false);
 
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [language, setLanguage] =
+    useState("ES");
 
-  const [currentPass, setCurrentPass] = useState("");
-  const [newPass, setNewPass] = useState("");
-  const [repeatPass, setRepeatPass] = useState("");
+  const [showPasswordModal, setShowPasswordModal] =
+    useState(false);
 
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showRepeat, setShowRepeat] = useState(false);
+  const [showInfoModal, setShowInfoModal] =
+    useState(false);
+
+  const [modalTitle, setModalTitle] =
+    useState("");
+
+  const [modalMessage, setModalMessage] =
+    useState("");
+
+  const [currentPass, setCurrentPass] =
+    useState("");
+
+  const [newPass, setNewPass] =
+    useState("");
+
+  const [repeatPass, setRepeatPass] =
+    useState("");
+
+  const [showCurrent, setShowCurrent] =
+    useState(false);
+
+  const [showNew, setShowNew] =
+    useState(false);
+
+  const [showRepeat, setShowRepeat] =
+    useState(false);
 
   const handleShowEmail = () => {
-    const message = user?.email || "No disponible";
+    setModalTitle("Correo electrónico");
 
-    if (Platform.OS === "web") {
-      window.alert(`Correo: ${message}`);
-    } else {
-      Alert.alert("Correo", message);
-    }
-  };
+    setModalMessage(
+      user?.email || "No disponible"
+    );
 
-  const handleShowRole = () => {
-    const message = user?.role || "Sin rol";
-
-    if (Platform.OS === "web") {
-      window.alert(`Rol: ${message}`);
-    } else {
-      Alert.alert("Rol", message);
-    }
+    setShowInfoModal(true);
   };
 
   const resetPasswordFields = () => {
@@ -70,40 +82,67 @@ export default function SettingsScreen() {
     setShowRepeat(false);
   };
 
+  const openInfoModal = (
+    title: string,
+    message: string
+  ) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setShowInfoModal(true);
+  };
+
   const handleChangePassword = async () => {
-    if (!currentPass || !newPass || !repeatPass) {
-      return Alert.alert("Error", "Completa todos los campos");
+    if (
+      !currentPass ||
+      !newPass ||
+      !repeatPass
+    ) {
+      openInfoModal(
+        "Error",
+        "Completa todos los campos"
+      );
+      return;
     }
 
     if (newPass !== repeatPass) {
-      return Alert.alert("Error", "Las contraseñas no coinciden");
+      openInfoModal(
+        "Error",
+        "Las contraseñas no coinciden"
+      );
+      return;
     }
 
     try {
       await changePasswordRequest(
-  currentPass,
-  newPass
-);
+        currentPass,
+        newPass
+      );
 
-      Alert.alert(
+      openInfoModal(
         "Éxito",
         "Contraseña actualizada correctamente"
       );
 
       resetPasswordFields();
       setShowPasswordModal(false);
+
     } catch (error: any) {
-      Alert.alert(
+      openInfoModal(
         "Error",
-        error.message || "No se pudo cambiar la contraseña"
+        error.message ||
+          "No se pudo cambiar la contraseña"
       );
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.header}>Opciones</Text>
+    <SafeAreaView  style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.header}>
+          Opciones
+        </Text>
 
         {/* PERFIL */}
         <View style={styles.profileCard}>
@@ -121,7 +160,8 @@ export default function SettingsScreen() {
 
             <View>
               <Text style={styles.name}>
-                {user?.username || "Usuario"}
+                {user?.username ||
+                  "Usuario"}
               </Text>
             </View>
           </View>
@@ -139,13 +179,17 @@ export default function SettingsScreen() {
         </View>
 
         {/* APP */}
-        <Text style={styles.section}>APP</Text>
+        <Text style={styles.section}>
+          APP
+        </Text>
 
         <View style={styles.card}>
           <TouchableOpacity
             style={styles.row}
             onPress={() =>
-              navigation.navigate("Libreria" as never)
+              navigation.navigate(
+                "Libreria" as never
+              )
             }
           >
             <View style={styles.rowLeft}>
@@ -154,13 +198,18 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
-              <Text style={styles.item}>Librería</Text>
+
+              <Text style={styles.item}>
+                Librería
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
 
         {/* CUENTA */}
-        <Text style={styles.section}>CUENTA</Text>
+        <Text style={styles.section}>
+          CUENTA
+        </Text>
 
         <View style={styles.card}>
           <TouchableOpacity
@@ -173,6 +222,7 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
+
               <Text style={styles.item}>
                 Correo electrónico
               </Text>
@@ -181,7 +231,9 @@ export default function SettingsScreen() {
 
           <TouchableOpacity
             style={styles.row}
-            onPress={() => setShowPasswordModal(true)}
+            onPress={() =>
+              setShowPasswordModal(true)
+            }
           >
             <View style={styles.rowLeft}>
               <Ionicons
@@ -189,6 +241,7 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
+
               <Text style={styles.item}>
                 Cambiar contraseña
               </Text>
@@ -197,7 +250,9 @@ export default function SettingsScreen() {
         </View>
 
         {/* PREFERENCIAS */}
-        <Text style={styles.section}>PREFERENCIAS</Text>
+        <Text style={styles.section}>
+          PREFERENCIAS
+        </Text>
 
         <View style={styles.card}>
           <View style={styles.row}>
@@ -207,7 +262,10 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
-              <Text style={styles.item}>Tema</Text>
+
+              <Text style={styles.item}>
+                Tema
+              </Text>
             </View>
 
             <Switch
@@ -227,6 +285,7 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
+
               <Text style={styles.item}>
                 Notificaciones
               </Text>
@@ -234,7 +293,9 @@ export default function SettingsScreen() {
 
             <Switch
               value={notifications}
-              onValueChange={setNotifications}
+              onValueChange={
+                setNotifications
+              }
               trackColor={{
                 true: colors.primary,
                 false: colors.border,
@@ -249,13 +310,18 @@ export default function SettingsScreen() {
                 size={18}
                 color={colors.primary}
               />
-              <Text style={styles.item}>Idioma</Text>
+
+              <Text style={styles.item}>
+                Idioma
+              </Text>
             </View>
 
             <TouchableOpacity
               onPress={() =>
                 setLanguage(
-                  language === "ES" ? "EN" : "ES"
+                  language === "ES"
+                    ? "EN"
+                    : "ES"
                 )
               }
             >
@@ -276,6 +342,97 @@ export default function SettingsScreen() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* MODAL INFORMACIÓN */}
+      <Modal
+        visible={showInfoModal}
+        transparent
+        animationType="fade"
+      >
+        <TouchableWithoutFeedback
+          onPress={() =>
+            setShowInfoModal(false)
+          }
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor:
+                "rgba(0,0,0,0.6)",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 20,
+            }}
+          >
+            <TouchableWithoutFeedback>
+              <View
+                style={{
+                  width: "90%",
+                  backgroundColor:
+                    colors.card,
+                  borderRadius: 20,
+                  padding: 25,
+                  alignItems: "center",
+                }}
+              >
+                <Ionicons
+                  name="information-circle"
+                  size={60}
+                  color={colors.primary}
+                />
+
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontSize: 22,
+                    fontWeight: "bold",
+                    marginTop: 15,
+                  }}
+                >
+                  {modalTitle}
+                </Text>
+
+                <Text
+                  style={{
+                    color:
+                      colors.textSecondary,
+                    marginTop: 12,
+                    fontSize: 16,
+                    textAlign: "center",
+                    lineHeight: 22,
+                  }}
+                >
+                  {modalMessage}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    setShowInfoModal(false)
+                  }
+                  style={{
+                    marginTop: 25,
+                    backgroundColor:
+                      colors.primary,
+                    paddingVertical: 12,
+                    paddingHorizontal: 40,
+                    borderRadius: 12,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: 16,
+                    }}
+                  >
+                    Cerrar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
 
       {/* MODAL CAMBIAR PASSWORD */}
       <Modal
@@ -304,7 +461,8 @@ export default function SettingsScreen() {
             <TouchableWithoutFeedback>
               <View
                 style={{
-                  backgroundColor: colors.card,
+                  backgroundColor:
+                    colors.card,
                   padding: 20,
                   borderRadius: 14,
                 }}
@@ -324,7 +482,8 @@ export default function SettingsScreen() {
                   {
                     placeholder:
                       "Contraseña actual",
-                    setter: setCurrentPass,
+                    setter:
+                      setCurrentPass,
                     show: showCurrent,
                     toggle: () =>
                       setShowCurrent(
@@ -337,12 +496,15 @@ export default function SettingsScreen() {
                     setter: setNewPass,
                     show: showNew,
                     toggle: () =>
-                      setShowNew(!showNew),
+                      setShowNew(
+                        !showNew
+                      ),
                   },
                   {
                     placeholder:
                       "Repetir contraseña",
-                    setter: setRepeatPass,
+                    setter:
+                      setRepeatPass,
                     show: showRepeat,
                     toggle: () =>
                       setShowRepeat(
@@ -352,7 +514,9 @@ export default function SettingsScreen() {
                 ].map((field, index) => (
                   <View
                     key={index}
-                    style={styles.inputContainer}
+                    style={
+                      styles.inputContainer
+                    }
                   >
                     <Ionicons
                       name="lock-closed-outline"
@@ -411,6 +575,7 @@ export default function SettingsScreen() {
                       setShowPasswordModal(
                         false
                       );
+
                       resetPasswordFields();
                     }}
                     style={{
@@ -426,7 +591,8 @@ export default function SettingsScreen() {
                   >
                     <Text
                       style={{
-                        color: colors.text,
+                        color:
+                          colors.text,
                       }}
                     >
                       Cancelar
@@ -450,18 +616,21 @@ export default function SettingsScreen() {
                     <Text
                       style={{
                         color: "#fff",
-                        fontWeight: "600",
+                        fontWeight:
+                          "600",
                       }}
                     >
                       Guardar
                     </Text>
                   </TouchableOpacity>
                 </View>
+
               </View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-    </View>
+
+</SafeAreaView>
   );
 }

@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-#rom rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User

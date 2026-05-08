@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import SavedGraphCard from "../components/SavedGraphCard";
 import { useTheme } from "../theme/ThemeContext";
 import { getStyles } from "../styles/library.styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type NavigationProp = NativeStackNavigationProp<any>;
 
@@ -50,7 +51,7 @@ export default function LibraryScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView  style={styles.container}>
 
       <View style={styles.content}>
         <View style={styles.headerContainer}>
@@ -117,6 +118,6 @@ export default function LibraryScreen() {
         </View>
       </ScrollView>
 
-    </View>
+    </SafeAreaView>
   );
 }
