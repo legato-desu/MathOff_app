@@ -16,6 +16,10 @@ export default function ProfileScreen() {
 
   const roleStyle = getRoleStyles(user?.role ?? null);
 
+  if (!user) {
+  return null;
+}
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
 

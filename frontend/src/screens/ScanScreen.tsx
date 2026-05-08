@@ -34,6 +34,8 @@ export default function ScanScreen() {
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
+        JWT_TOKENS
+        console.log("Foto tomada:", photo.uri);
         setPhotoUri(photo.uri); 
       } catch (e) {
         console.log("Error al tomar foto", e);

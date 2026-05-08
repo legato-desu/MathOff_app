@@ -8,8 +8,10 @@ import {
   Modal,
   TextInput,
   ScrollView,
-  Platform
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,10 +19,8 @@ import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/settings.styles";
 import { useAuthStore } from "../store/authStore";
 import { changePasswordRequest } from "../servicios/api";
-import { TouchableWithoutFeedback } from "react-native";
 
 export default function SettingsScreen() {
-
   const { isDark, toggleTheme, colors } = useTheme();
   const styles = createStyles(colors);
 
@@ -41,24 +41,34 @@ export default function SettingsScreen() {
   const [showRepeat, setShowRepeat] = useState(false);
 
   const handleShowEmail = () => {
-  const message = user?.email || "No disponible";
+    const message = user?.email || "No disponible";
 
-  if (Platform.OS === "web") {
-    window.alert(`Correo: ${message}`);
-  } else {
-    Alert.alert("Correo", message);
-  }
-};
+    if (Platform.OS === "web") {
+      window.alert(`Correo: ${message}`);
+    } else {
+      Alert.alert("Correo", message);
+    }
+  };
 
-const handleShowRole = () => {
-  const message = "Usuario";
+  const handleShowRole = () => {
+    const message = user?.role || "Sin rol";
 
-  if (Platform.OS === "web") {
-    window.alert(`Rol: ${message}`);
-  } else {
-    Alert.alert("Rol", message);
-  }
-};
+    if (Platform.OS === "web") {
+      window.alert(`Rol: ${message}`);
+    } else {
+      Alert.alert("Rol", message);
+    }
+  };
+
+  const resetPasswordFields = () => {
+    setCurrentPass("");
+    setNewPass("");
+    setRepeatPass("");
+
+    setShowCurrent(false);
+    setShowNew(false);
+    setShowRepeat(false);
+  };
 
   const handleChangePassword = async () => {
     if (!currentPass || !newPass || !repeatPass) {
@@ -70,45 +80,62 @@ const handleShowRole = () => {
     }
 
     try {
-      await changePasswordRequest(user.id, currentPass, newPass);
+      await changePasswordRequest(
+  currentPass,
+  newPass
+);
 
-      Alert.alert("Éxito", "Contraseña actualizada");
+      Alert.alert(
+        "Éxito",
+        "Contraseña actualizada correctamente"
+      );
 
-      setCurrentPass("");
-      setNewPass("");
-      setRepeatPass("");
+      resetPasswordFields();
       setShowPasswordModal(false);
-
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      Alert.alert(
+        "Error",
+        error.message || "No se pudo cambiar la contraseña"
+      );
     }
   };
 
   return (
     <View style={styles.container}>
-
       <ScrollView showsVerticalScrollIndicator={false}>
-
         <Text style={styles.header}>Opciones</Text>
 
         {/* PERFIL */}
         <View style={styles.profileCard}>
-
           <View style={styles.profileLeft}>
             <View style={styles.avatar}>
-              <Text style={{ color: colors.primary, fontSize: 22 }}>👤</Text>
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontSize: 22,
+                }}
+              >
+                👤
+              </Text>
             </View>
 
             <View>
-              <Text style={styles.name}>{user?.username || "Usuario"}</Text>
+              <Text style={styles.name}>
+                {user?.username || "Usuario"}
+              </Text>
             </View>
           </View>
 
-          {/* 🔥 ICONO LOGOUT DERECHA */}
-          <TouchableOpacity onPress={logout} style={{ padding: 8 }}>
-            <Ionicons name="log-out-outline" size={22} color={colors.primary} />
+          <TouchableOpacity
+            onPress={logout}
+            style={{ padding: 8 }}
+          >
+            <Ionicons
+              name="log-out-outline"
+              size={22}
+              color={colors.primary}
+            />
           </TouchableOpacity>
-
         </View>
 
         {/* APP */}
@@ -117,10 +144,16 @@ const handleShowRole = () => {
         <View style={styles.card}>
           <TouchableOpacity
             style={styles.row}
-            onPress={() => navigation.navigate("Libreria" as never)}
+            onPress={() =>
+              navigation.navigate("Libreria" as never)
+            }
           >
             <View style={styles.rowLeft}>
-              <Ionicons name="library-outline" size={18} color={colors.primary} />
+              <Ionicons
+                name="library-outline"
+                size={18}
+                color={colors.primary}
+              />
               <Text style={styles.item}>Librería</Text>
             </View>
           </TouchableOpacity>
@@ -130,11 +163,19 @@ const handleShowRole = () => {
         <Text style={styles.section}>CUENTA</Text>
 
         <View style={styles.card}>
-
-          <TouchableOpacity style={styles.row} onPress={handleShowEmail}>
+          <TouchableOpacity
+            style={styles.row}
+            onPress={handleShowEmail}
+          >
             <View style={styles.rowLeft}>
-              <Ionicons name="mail-outline" size={18} color={colors.primary} />
-              <Text style={styles.item}>Correo electronico</Text>
+              <Ionicons
+                name="mail-outline"
+                size={18}
+                color={colors.primary}
+              />
+              <Text style={styles.item}>
+                Correo electrónico
+              </Text>
             </View>
           </TouchableOpacity>
 
@@ -143,199 +184,284 @@ const handleShowRole = () => {
             onPress={() => setShowPasswordModal(true)}
           >
             <View style={styles.rowLeft}>
-              <Ionicons name="lock-closed-outline" size={18} color={colors.primary} />
-              <Text style={styles.item}>Cambiar contraseña</Text>
+              <Ionicons
+                name="lock-closed-outline"
+                size={18}
+                color={colors.primary}
+              />
+              <Text style={styles.item}>
+                Cambiar contraseña
+              </Text>
             </View>
           </TouchableOpacity>
-
         </View>
 
         {/* PREFERENCIAS */}
         <Text style={styles.section}>PREFERENCIAS</Text>
 
         <View style={styles.card}>
-
           <View style={styles.row}>
             <View style={styles.rowLeft}>
-              <Ionicons name="moon-outline" size={18} color={colors.primary} />
+              <Ionicons
+                name="moon-outline"
+                size={18}
+                color={colors.primary}
+              />
               <Text style={styles.item}>Tema</Text>
             </View>
 
             <Switch
               value={isDark}
               onValueChange={toggleTheme}
-              trackColor={{ true: colors.primary, false: colors.border }}
+              trackColor={{
+                true: colors.primary,
+                false: colors.border,
+              }}
             />
           </View>
 
           <View style={styles.row}>
             <View style={styles.rowLeft}>
-              <Ionicons name="notifications-outline" size={18} color={colors.primary} />
-              <Text style={styles.item}>Notificaciones</Text>
+              <Ionicons
+                name="notifications-outline"
+                size={18}
+                color={colors.primary}
+              />
+              <Text style={styles.item}>
+                Notificaciones
+              </Text>
             </View>
 
             <Switch
               value={notifications}
               onValueChange={setNotifications}
-              trackColor={{ true: colors.primary, false: colors.border }}
+              trackColor={{
+                true: colors.primary,
+                false: colors.border,
+              }}
             />
           </View>
 
           <View style={styles.row}>
             <View style={styles.rowLeft}>
-              <Ionicons name="language-outline" size={18} color={colors.primary} />
+              <Ionicons
+                name="language-outline"
+                size={18}
+                color={colors.primary}
+              />
               <Text style={styles.item}>Idioma</Text>
             </View>
 
             <TouchableOpacity
-              onPress={() => setLanguage(language === "ES" ? "EN" : "ES")}
+              onPress={() =>
+                setLanguage(
+                  language === "ES" ? "EN" : "ES"
+                )
+              }
             >
-              <Text style={styles.value}>{language}</Text>
+              <Text style={styles.value}>
+                {language}
+              </Text>
             </TouchableOpacity>
           </View>
-
         </View>
 
-        {/* BOTÓN ABAJO */}
-        <TouchableOpacity style={styles.logout} onPress={logout}>
-          <Text style={styles.logoutText}>CERRAR SESIÓN</Text>
+        {/* BOTÓN FINAL */}
+        <TouchableOpacity
+          style={styles.logout}
+          onPress={logout}
+        >
+          <Text style={styles.logoutText}>
+            CERRAR SESIÓN
+          </Text>
         </TouchableOpacity>
-
       </ScrollView>
 
+      {/* MODAL CAMBIAR PASSWORD */}
       <Modal
-  visible={showPasswordModal}
-  transparent
-  animationType="fade"
-  onRequestClose={() => setShowPasswordModal(false)}
->
-  <TouchableWithoutFeedback
-    onPress={() => setShowPasswordModal(false)}
-  >
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background + "CC",
-        justifyContent: "center",
-        padding: 20,
-      }}
-    >
-      {/* Evita que se cierre al tocar dentro */}
-      <TouchableWithoutFeedback>
-        <View
-          style={{
-            backgroundColor: colors.card,
-            padding: 20,
-            borderRadius: 12,
+        visible={showPasswordModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() =>
+          setShowPasswordModal(false)
+        }
+      >
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setShowPasswordModal(false);
+            resetPasswordFields();
           }}
         >
-          <Text
-            style={{
-              color: colors.text,
-              marginBottom: 15,
-              fontSize: 16,
-              fontWeight: "600",
-            }}
-          >
-            Cambiar contraseña
-          </Text>
-
-          {[
-            {
-              placeholder: "Actual",
-              set: setCurrentPass,
-              show: showCurrent,
-              toggle: () => setShowCurrent(!showCurrent),
-            },
-            {
-              placeholder: "Nueva",
-              set: setNewPass,
-              show: showNew,
-              toggle: () => setShowNew(!showNew),
-            },
-            {
-              placeholder: "Repetir nueva",
-              set: setRepeatPass,
-              show: showRepeat,
-              toggle: () => setShowRepeat(!showRepeat),
-            },
-          ].map((field, i) => (
-            <View key={i} style={styles.inputContainer}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={18}
-                color={colors.textSecondary}
-              />
-
-              <TextInput
-                placeholder={field.placeholder}
-                placeholderTextColor={colors.textSecondary}
-                secureTextEntry={!field.show}
-                style={styles.input}
-                onChangeText={field.set}
-              />
-
-              <TouchableOpacity onPress={field.toggle}>
-                <Ionicons
-                  name={field.show ? "eye-off-outline" : "eye-outline"}
-                  size={18}
-                  color={colors.textSecondary}
-                />
-              </TouchableOpacity>
-            </View>
-          ))}
-
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 20,
+              flex: 1,
+              backgroundColor:
+                colors.background + "CC",
+              justifyContent: "center",
+              padding: 20,
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                setShowPasswordModal(false);
-                setCurrentPass("");
-                setNewPass("");
-                setRepeatPass("");
-              }}
-              style={{
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 10,
-                backgroundColor: colors.border,
-                flex: 1,
-                marginRight: 10,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: colors.text }}>
-                Cancelar
-              </Text>
-            </TouchableOpacity>
+            <TouchableWithoutFeedback>
+              <View
+                style={{
+                  backgroundColor: colors.card,
+                  padding: 20,
+                  borderRadius: 14,
+                }}
+              >
+                <Text
+                  style={{
+                    color: colors.text,
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginBottom: 15,
+                  }}
+                >
+                  Cambiar contraseña
+                </Text>
 
-            <TouchableOpacity
-              onPress={handleChangePassword}
-              style={{
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 10,
-                backgroundColor: colors.primary,
-                flex: 1,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "#fff", fontWeight: "600" }}>
-                Guardar
-              </Text>
-            </TouchableOpacity>
+                {[
+                  {
+                    placeholder:
+                      "Contraseña actual",
+                    setter: setCurrentPass,
+                    show: showCurrent,
+                    toggle: () =>
+                      setShowCurrent(
+                        !showCurrent
+                      ),
+                  },
+                  {
+                    placeholder:
+                      "Nueva contraseña",
+                    setter: setNewPass,
+                    show: showNew,
+                    toggle: () =>
+                      setShowNew(!showNew),
+                  },
+                  {
+                    placeholder:
+                      "Repetir contraseña",
+                    setter: setRepeatPass,
+                    show: showRepeat,
+                    toggle: () =>
+                      setShowRepeat(
+                        !showRepeat
+                      ),
+                  },
+                ].map((field, index) => (
+                  <View
+                    key={index}
+                    style={styles.inputContainer}
+                  >
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={18}
+                      color={
+                        colors.textSecondary
+                      }
+                    />
+
+                    <TextInput
+                      placeholder={
+                        field.placeholder
+                      }
+                      placeholderTextColor={
+                        colors.textSecondary
+                      }
+                      secureTextEntry={
+                        !field.show
+                      }
+                      style={styles.input}
+                      onChangeText={
+                        field.setter
+                      }
+                    />
+
+                    <TouchableOpacity
+                      onPress={
+                        field.toggle
+                      }
+                    >
+                      <Ionicons
+                        name={
+                          field.show
+                            ? "eye-off-outline"
+                            : "eye-outline"
+                        }
+                        size={18}
+                        color={
+                          colors.textSecondary
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent:
+                      "space-between",
+                    marginTop: 20,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowPasswordModal(
+                        false
+                      );
+                      resetPasswordFields();
+                    }}
+                    style={{
+                      flex: 1,
+                      marginRight: 10,
+                      padding: 14,
+                      borderRadius: 10,
+                      backgroundColor:
+                        colors.border,
+                      alignItems:
+                        "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: colors.text,
+                      }}
+                    >
+                      Cancelar
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={
+                      handleChangePassword
+                    }
+                    style={{
+                      flex: 1,
+                      padding: 14,
+                      borderRadius: 10,
+                      backgroundColor:
+                        colors.primary,
+                      alignItems:
+                        "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Guardar
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
-  </TouchableWithoutFeedback>
-</Modal>
-
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 }

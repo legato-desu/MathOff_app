@@ -13,28 +13,20 @@ from .serializers import (
     UserListSerializer,
     RoleSerializer
 )
-
 from .permissions import IsAdministrador
 
-# 🔐 REGISTRO
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
 
-
-# 🔐 LOGIN
 class CustomLoginView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
-
-# 👑 ADMIN → LISTAR USUARIOS
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
     permission_classes = [IsAdministrador]
 
-
-# 👑 ADMIN → LISTAR ROLES
 class RoleListView(generics.ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer

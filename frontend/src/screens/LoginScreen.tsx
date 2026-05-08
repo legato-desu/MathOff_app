@@ -57,7 +57,6 @@ export default function LoginScreen() {
   try {
   const data = await loginRequest(username, password);
 
-  await AsyncStorage.setItem("accessToken", data.token);
   login(data.token, data.user);
 
   if (remember) {
