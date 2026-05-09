@@ -1,14 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
+  Image,
 } from "react-native";
 
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { useTheme } from "../theme/ThemeContext";
+import { createStyles } from "../styles/graph.styles";
+
 import { useAuthStore } from "../store/authStore";
 import { useScanStore } from "../store/scanStore";
 
@@ -18,7 +21,10 @@ export default function ScanScreen() {
 
   const { colors } = useTheme();
 
+  const styles = createStyles(colors);
+
   const token = useAuthStore((state) => state.token);
+
   const openLogin = useAuthStore((state) => state.openLogin);
 
   const addImage = useScanStore((state) => state.addImage);
@@ -27,16 +33,22 @@ export default function ScanScreen() {
 
   const cameraRef = useRef<CameraView>(null);
 
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
+
   useEffect(() => {
+
     if (!token) {
       openLogin();
     }
-  }, []);
+
+  }, [token]);
 
   useEffect(() => {
+
     if (token && !permission?.granted) {
       requestPermission();
     }
+
   }, [permission, token]);
 
   const handleCapture = async () => {
@@ -49,9 +61,12 @@ export default function ScanScreen() {
 
         if (photo?.uri) {
 
-          addImage(photo.uri);
+          console.log("Foto tomada:", photo.uri);
 
-          console.log("Foto guardada:", photo.uri);
+          setPhotoUri(photo.uri);
+
+          // ✅ Guardar en historial
+          addImage(photo.uri);
         }
 
       } catch (e) {
@@ -62,15 +77,21 @@ export default function ScanScreen() {
     }
   };
 
+  // 🔒 SIN LOGIN
   if (!token) {
 
     return (
+
       <View
         style={[
-          styles.center,
-          { backgroundColor: colors.background }
+          styles.container,
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
+
         <Text
           style={{
             color: colors.text,
@@ -82,51 +103,158 @@ export default function ScanScreen() {
 
         <TouchableOpacity
           onPress={openLogin}
-          style={[
-            styles.button,
-            { backgroundColor: colors.primary }
-          ]}
+          style={{
+            backgroundColor: colors.primary,
+            padding: 12,
+            borderRadius: 10
+          }}
         >
-          <Text style={{ color: colors.white }}>
+
+          <Text
+            style={{
+              color: "#fff",
+              fontWeight: "bold"
+            }}
+          >
             Iniciar sesión
           </Text>
+
         </TouchableOpacity>
+
       </View>
     );
   }
 
+  // 📷 PREVIEW FOTO
+  if (photoUri) {
+
+    return (
+
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background
+        }}
+      >
+
+        <Image
+          source={{ uri: photoUri }}
+          style={{ flex: 1 }}
+          resizeMode="contain"
+        />
+
+        <View
+          style={{
+            position: "absolute",
+            bottom: 40,
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-around"
+          }}
+        >
+
+          {/* ❌ CANCELAR */}
+          <TouchableOpacity
+            onPress={() => setPhotoUri(null)}
+            style={{
+              backgroundColor: "#ff4444",
+              padding: 15,
+              borderRadius: 10
+            }}
+          >
+
+            <Text
+              style={{
+                color: "#fff",
+                fontWeight: "bold"
+              }}
+            >
+              Cancelar
+            </Text>
+
+          </TouchableOpacity>
+
+          {/* ✅ ENVIAR */}
+          <TouchableOpacity
+            onPress={() => {
+
+              console.log("Enviar foto:", photoUri);
+
+              // 👉 Aquí puedes enviarla al backend
+
+              setPhotoUri(null);
+            }}
+            style={{
+              backgroundColor: colors.primary,
+              padding: 15,
+              borderRadius: 10
+            }}
+          >
+
+            <Text
+              style={{
+                color: "#fff",
+                fontWeight: "bold"
+              }}
+            >
+              Enviar
+            </Text>
+
+          </TouchableOpacity>
+
+        </View>
+
+      </View>
+    );
+  }
+
+  // ⏳ CARGANDO PERMISOS
   if (!permission) {
 
     return (
+
       <View
         style={[
-          styles.center,
-          { backgroundColor: colors.background }
+          styles.container,
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
+
         <Text style={{ color: colors.text }}>
           Cargando permisos...
         </Text>
+
       </View>
     );
   }
 
+  // ❌ SIN PERMISOS
   if (!permission.granted) {
 
     return (
+
       <View
         style={[
-          styles.center,
-          { backgroundColor: colors.background }
+          styles.container,
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
+
         <Text style={{ color: colors.text }}>
           No hay permisos de cámara
         </Text>
+
       </View>
     );
   }
 
+  // ✅ CÁMARA
   return (
 
     <SafeAreaView
@@ -143,44 +271,27 @@ export default function ScanScreen() {
 
       <TouchableOpacity
         onPress={handleCapture}
-        style={[
-          styles.captureButton,
-          { backgroundColor: colors.primary }
-        ]}
+        style={{
+          position: "absolute",
+          bottom: 40,
+          alignSelf: "center",
+          padding: 20,
+          borderRadius: 50,
+          backgroundColor: colors.primary
+        }}
       >
+
         <Text
           style={{
-            color: colors.white,
-            fontSize: 22
+            color: "#fff",
+            fontSize: 20
           }}
         >
           📸
         </Text>
+
       </TouchableOpacity>
 
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  button: {
-    padding: 12,
-    borderRadius: 10,
-  },
-
-  captureButton: {
-    position: "absolute",
-    bottom: 40,
-    alignSelf: "center",
-    padding: 20,
-    borderRadius: 50,
-  },
-
-});
