@@ -1,59 +1,103 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/graph.styles";
+
 import { useAuthStore } from "../store/authStore";
+import { useScanStore } from "../store/scanStore";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ScanScreen() {
+
   const { colors } = useTheme();
+
   const styles = createStyles(colors);
 
   const token = useAuthStore((state) => state.token);
+
   const openLogin = useAuthStore((state) => state.openLogin);
 
+  const addImage = useScanStore((state) => state.addImage);
+
   const [permission, requestPermission] = useCameraPermissions();
+
   const cameraRef = useRef<CameraView>(null);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   useEffect(() => {
+
     if (!token) {
       openLogin();
     }
+
   }, [token]);
 
   useEffect(() => {
+
     if (token && !permission?.granted) {
       requestPermission();
     }
+
   }, [permission, token]);
 
   const handleCapture = async () => {
+
     if (cameraRef.current) {
+
       try {
+
         const photo = await cameraRef.current.takePictureAsync();
-        JWT_TOKENS
-        console.log("Foto tomada:", photo.uri);
-        setPhotoUri(photo.uri); 
+
+        if (photo?.uri) {
+
+          console.log("Foto tomada:", photo.uri);
+
+          setPhotoUri(photo.uri);
+
+          // ✅ Guardar en historial
+          addImage(photo.uri);
+        }
+
       } catch (e) {
+
         console.log("Error al tomar foto", e);
+
       }
     }
   };
 
-  // NO LOGIN
+  // 🔒 SIN LOGIN
   if (!token) {
+
     return (
+
       <View
         style={[
           styles.container,
-          { justifyContent: "center", alignItems: "center" }
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
-        <Text style={{ color: colors.text, marginBottom: 20 }}>
+
+        <Text
+          style={{
+            color: colors.text,
+            marginBottom: 20
+          }}
+        >
           Debes iniciar sesión para usar el escáner
         </Text>
 
@@ -65,18 +109,34 @@ export default function ScanScreen() {
             borderRadius: 10
           }}
         >
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>
+
+          <Text
+            style={{
+              color: "#fff",
+              fontWeight: "bold"
+            }}
+          >
             Iniciar sesión
           </Text>
+
         </TouchableOpacity>
+
       </View>
     );
   }
 
-  // PREVIEW DE FOTO
+  // 📷 PREVIEW FOTO
   if (photoUri) {
+
     return (
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
+
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background
+        }}
+      >
+
         <Image
           source={{ uri: photoUri }}
           style={{ flex: 1 }}
@@ -92,7 +152,8 @@ export default function ScanScreen() {
             justifyContent: "space-around"
           }}
         >
-          {/* ❌ Cancelar */}
+
+          {/* ❌ CANCELAR */}
           <TouchableOpacity
             onPress={() => setPhotoUri(null)}
             style={{
@@ -101,19 +162,25 @@ export default function ScanScreen() {
               borderRadius: 10
             }}
           >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>
+
+            <Text
+              style={{
+                color: "#fff",
+                fontWeight: "bold"
+              }}
+            >
               Cancelar
             </Text>
+
           </TouchableOpacity>
 
-          {/* ✅ Enviar */}
+          {/* ✅ ENVIAR */}
           <TouchableOpacity
             onPress={() => {
+
               console.log("Enviar foto:", photoUri);
 
-              // 👉 aquí puedes enviarla al backend
-              // ejemplo:
-              // uploadPhoto(photoUri);
+              // 👉 Aquí puedes enviarla al backend
 
               setPhotoUri(null);
             }}
@@ -123,46 +190,84 @@ export default function ScanScreen() {
               borderRadius: 10
             }}
           >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>
+
+            <Text
+              style={{
+                color: "#fff",
+                fontWeight: "bold"
+              }}
+            >
               Enviar
             </Text>
+
           </TouchableOpacity>
+
         </View>
+
       </View>
     );
   }
 
+  // ⏳ CARGANDO PERMISOS
   if (!permission) {
+
     return (
+
       <View
         style={[
           styles.container,
-          { justifyContent: "center", alignItems: "center" }
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
-        <Text style={{ color: colors.text }}>Cargando permisos...</Text>
+
+        <Text style={{ color: colors.text }}>
+          Cargando permisos...
+        </Text>
+
       </View>
     );
   }
 
+  // ❌ SIN PERMISOS
   if (!permission.granted) {
+
     return (
+
       <View
         style={[
           styles.container,
-          { justifyContent: "center", alignItems: "center" }
+          {
+            justifyContent: "center",
+            alignItems: "center"
+          }
         ]}
       >
+
         <Text style={{ color: colors.text }}>
           No hay permisos de cámara
         </Text>
+
       </View>
     );
   }
 
+  // ✅ CÁMARA
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <CameraView ref={cameraRef} style={{ flex: 1 }} />
+
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background
+      }}
+    >
+
+      <CameraView
+        ref={cameraRef}
+        style={{ flex: 1 }}
+      />
 
       <TouchableOpacity
         onPress={handleCapture}
@@ -175,8 +280,18 @@ export default function ScanScreen() {
           backgroundColor: colors.primary
         }}
       >
-        <Text style={{ color: "#fff", fontSize: 20 }}>📸</Text>
+
+        <Text
+          style={{
+            color: "#fff",
+            fontSize: 20
+          }}
+        >
+          📸
+        </Text>
+
       </TouchableOpacity>
+
     </SafeAreaView>
   );
 }
