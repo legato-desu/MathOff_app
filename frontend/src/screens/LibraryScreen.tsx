@@ -1,27 +1,40 @@
 import React from "react";
+
 import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
+
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import SavedGraphCard from "../components/SavedGraphCard";
+
 import { useTheme } from "../theme/ThemeContext";
+
 import { getStyles } from "../styles/library.styles";
+
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useScanStore } from "../store/scanStore";
 
 type NavigationProp = NativeStackNavigationProp<any>;
 
 export default function LibraryScreen() {
 
   const { colors } = useTheme();
+
   const styles = getStyles(colors);
 
   const navigation = useNavigation<NavigationProp>();
+
+  const images = useScanStore((state) => state.images);
 
   const learningItems = [
     {
@@ -51,38 +64,95 @@ export default function LibraryScreen() {
   ];
 
   return (
-    <SafeAreaView  style={styles.container}>
+
+    <SafeAreaView style={styles.container}>
 
       <View style={styles.content}>
+
         <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={colors.text} />
+
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color={colors.text}
+            />
           </TouchableOpacity>
 
           <Text style={styles.header}>
             Librería
           </Text>
+
         </View>
+
       </View>
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+
         <View style={styles.content}>
 
           <View style={styles.tabsContainer}>
-            <Text style={styles.activeTab}>Historial</Text>
+            <Text style={styles.activeTab}>
+              Historial
+            </Text>
           </View>
 
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Gráficos Guardados</Text>
-            <Text style={styles.viewAll}>Ver todos</Text>
+
+            <Text style={styles.sectionTitle}>
+              Gráficos Guardados
+            </Text>
+
+            <Text style={styles.viewAll}>
+              Ver todos
+            </Text>
+
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <SavedGraphCard title="y = 1 - x²" />
-            <SavedGraphCard title="y = sin(x)" />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+
+            {images.length === 0 ? (
+
+              <SavedGraphCard title="No hay imágenes" />
+
+            ) : (
+
+              images.map((item) => (
+
+                <View
+                  key={item.id}
+                  style={{
+                    width: 140,
+                    height: 120,
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    marginRight: 12,
+                    backgroundColor: "#123",
+                  }}
+                >
+
+                  <Image
+                    source={{ uri: item.uri }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    resizeMode="cover"
+                  />
+
+                </View>
+
+              ))
+            )}
+
           </ScrollView>
 
           <Text style={styles.quickLearnTitle}>
@@ -90,6 +160,7 @@ export default function LibraryScreen() {
           </Text>
 
           {learningItems.map((item, index) => (
+
             <TouchableOpacity
               key={index}
               style={styles.card}
@@ -99,7 +170,14 @@ export default function LibraryScreen() {
                 })
               }
             >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}
+              >
+
                 <Ionicons
                   name={item.icon as any}
                   size={20}
@@ -108,14 +186,25 @@ export default function LibraryScreen() {
                 />
 
                 <View>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardSubtitle}>{item.desc}</Text>
+
+                  <Text style={styles.cardTitle}>
+                    {item.title}
+                  </Text>
+
+                  <Text style={styles.cardSubtitle}>
+                    {item.desc}
+                  </Text>
+
                 </View>
+
               </View>
+
             </TouchableOpacity>
+
           ))}
 
         </View>
+
       </ScrollView>
 
     </SafeAreaView>

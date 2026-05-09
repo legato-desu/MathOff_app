@@ -1,18 +1,30 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { useTheme } from "../theme/ThemeContext";
 import { useAuthStore } from "../store/authStore";
+import { useScanStore } from "../store/scanStore";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ScanScreen() {
+
   const { colors } = useTheme();
 
   const token = useAuthStore((state) => state.token);
   const openLogin = useAuthStore((state) => state.openLogin);
 
+  const addImage = useScanStore((state) => state.addImage);
+
   const [permission, requestPermission] = useCameraPermissions();
+
   const cameraRef = useRef<CameraView>(null);
 
   useEffect(() => {
@@ -28,71 +40,141 @@ export default function ScanScreen() {
   }, [permission, token]);
 
   const handleCapture = async () => {
+
     if (cameraRef.current) {
+
       try {
+
         const photo = await cameraRef.current.takePictureAsync();
-        console.log("Foto tomada:", photo.uri);
+
+        if (photo?.uri) {
+
+          addImage(photo.uri);
+
+          console.log("Foto guardada:", photo.uri);
+        }
+
       } catch (e) {
+
         console.log("Error al tomar foto", e);
+
       }
     }
   };
 
   if (!token) {
+
     return (
-      <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text, marginBottom: 20 }}>
+      <View
+        style={[
+          styles.center,
+          { backgroundColor: colors.background }
+        ]}
+      >
+        <Text
+          style={{
+            color: colors.text,
+            marginBottom: 20
+          }}
+        >
           Debes iniciar sesión para usar el escáner
         </Text>
+
         <TouchableOpacity
           onPress={openLogin}
-          style={[styles.button, { backgroundColor: colors.primary }]}
+          style={[
+            styles.button,
+            { backgroundColor: colors.primary }
+          ]}
         >
-          <Text style={{ color: colors.white }}>Iniciar sesión</Text>
+          <Text style={{ color: colors.white }}>
+            Iniciar sesión
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   if (!permission) {
+
     return (
-      <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text }}>Cargando permisos...</Text>
+      <View
+        style={[
+          styles.center,
+          { backgroundColor: colors.background }
+        ]}
+      >
+        <Text style={{ color: colors.text }}>
+          Cargando permisos...
+        </Text>
       </View>
     );
   }
 
   if (!permission.granted) {
+
     return (
-      <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text }}>No hay permisos de cámara</Text>
+      <View
+        style={[
+          styles.center,
+          { backgroundColor: colors.background }
+        ]}
+      >
+        <Text style={{ color: colors.text }}>
+          No hay permisos de cámara
+        </Text>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <CameraView ref={cameraRef} style={{ flex: 1 }} />
+
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background
+      }}
+    >
+
+      <CameraView
+        ref={cameraRef}
+        style={{ flex: 1 }}
+      />
+
       <TouchableOpacity
         onPress={handleCapture}
-        style={[styles.captureButton, { backgroundColor: colors.primary }]}
+        style={[
+          styles.captureButton,
+          { backgroundColor: colors.primary }
+        ]}
       >
-        <Text style={{ color: colors.white }}>📸</Text>
+        <Text
+          style={{
+            color: colors.white,
+            fontSize: 22
+          }}
+        >
+          📸
+        </Text>
       </TouchableOpacity>
+
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+
   button: {
     padding: 12,
     borderRadius: 10,
   },
+
   captureButton: {
     position: "absolute",
     bottom: 40,
@@ -100,4 +182,5 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 50,
   },
+
 });
