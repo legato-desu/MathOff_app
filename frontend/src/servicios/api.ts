@@ -203,7 +203,7 @@ export const registerRequest = async (
   try {
 
     const response = await fetch(
-      `${API_URL}/users/register/`,
+      `${API_URL}/register/`,
       {
         method: "POST",
 
