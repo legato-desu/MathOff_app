@@ -6,7 +6,6 @@ from .models import Ejercicio
 from .serializers import EjercicioSerializer
 
 
-# CREAR ejercicio (docente)
 class CrearEjercicioView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -20,7 +19,6 @@ class CrearEjercicioView(APIView):
         return Response(serializer.errors, status=400)
 
 
-# LISTAR ejercicios (estudiante)
 class ListarEjerciciosView(APIView):
     permission_classes = [IsAuthenticated]
 

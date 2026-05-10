@@ -8,6 +8,7 @@ import UsuariosScreen from "../screens/UsuariosScreen";
 import RolesScreen from "../screens/RolesScreen";
 import ReportesScreen from "../screens/ReportesScreen";
 import { useAuthStore } from "../store/authStore";
+import RespuestasScreen from "../screens/RespuestasScreen";
 import {
   View,
   ActivityIndicator,
@@ -49,6 +50,10 @@ export default function MainNavigator() {
         name="LearnDetail"
         component={LearnDetailScreen}
       />
+      <Stack.Screen
+  name="Respuestas"
+  component={RespuestasScreen}
+/>
 
       {!isAuthenticated && (
         <Stack.Screen

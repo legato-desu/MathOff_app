@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "../theme/ThemeContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfesorDashboard() {
   const { colors } = useTheme();
@@ -11,6 +12,8 @@ export default function ProfesorDashboard() {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [funcionCorrecta, setFuncionCorrecta] = useState("");
+  const navigation = useNavigation<any>();
+  
 
   const crearEjercicio = async () => {
     const token = await AsyncStorage.getItem("accessToken");
@@ -114,6 +117,25 @@ export default function ProfesorDashboard() {
           Crear Ejercicio
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+  onPress={() => navigation.navigate("Respuestas")}
+  style={{
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 15,
+  }}
+>
+  <Text
+    style={{
+      color: "#fff",
+      fontWeight: "bold",
+    }}
+  >
+    Ver Respuestas
+  </Text>
+</TouchableOpacity>
     </ScrollView>
   );
 }
