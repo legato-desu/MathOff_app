@@ -1,33 +1,69 @@
-from rest_framework import generics, permissions
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics, viewsets
+
+from rest_framework.permissions import (
+    IsAuthenticated,
+)
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+)
 
 from .models import User
-from .serializers import RegisterSerializer
-from .login_serializer import CustomTokenObtainPairSerializer
-
-from roles.models import Role
 
 from .serializers import (
     RegisterSerializer,
     UserListSerializer,
-    RoleSerializer
+    RoleSerializer,
 )
+
+from .login_serializer import (
+    CustomTokenObtainPairSerializer,
+)
+
 from .permissions import IsAdministrador
 
+from roles.models import Role
+
+
+# LOGIN
+class CustomLoginView(TokenObtainPairView):
+    serializer_class = (
+        CustomTokenObtainPairSerializer
+    )
+
+
+# REGISTER
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
+
     serializer_class = RegisterSerializer
 
-class CustomLoginView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
 
-class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
+# CRUD USUARIOS
+class UserViewSet(viewsets.ModelViewSet):
+
+    queryset = User.objects.all().order_by(
+        "-id"
+    )
+
     serializer_class = UserListSerializer
-    permission_classes = [IsAdministrador]
 
-class RoleListView(generics.ListAPIView):
-    queryset = Role.objects.all()
+    permission_classes = [
+        IsAuthenticated,
+        IsAdministrador,
+    ]
+
+
+# CRUD ROLES
+class RoleViewSet(viewsets.ModelViewSet):
+
+    queryset = Role.objects.all().order_by(
+        "-id"
+    )
+
     serializer_class = RoleSerializer
-    permission_classes = [IsAdministrador]
+
+    permission_classes = [
+        IsAuthenticated,
+        IsAdministrador,
+    ]
