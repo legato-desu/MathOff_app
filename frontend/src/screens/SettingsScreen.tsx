@@ -207,47 +207,45 @@ export default function SettingsScreen() {
         </View>
 
         {/* CUENTA */}
-        <Text style={styles.section}>
-          CUENTA
-        </Text>
+{user && (
+  <>
+    <Text style={styles.section}>CUENTA</Text>
 
-        <View style={styles.card}>
-          <TouchableOpacity
-            style={styles.row}
-            onPress={handleShowEmail}
-          >
-            <View style={styles.rowLeft}>
-              <Ionicons
-                name="mail-outline"
-                size={18}
-                color={colors.primary}
-              />
-
-              <Text style={styles.item}>
-                Correo electrónico
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.row}
-            onPress={() =>
-              setShowPasswordModal(true)
-            }
-          >
-            <View style={styles.rowLeft}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={18}
-                color={colors.primary}
-              />
-
-              <Text style={styles.item}>
-                Cambiar contraseña
-              </Text>
-            </View>
-          </TouchableOpacity>
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={handleShowEmail}
+      >
+        <View style={styles.rowLeft}>
+          <Ionicons
+            name="mail-outline"
+            size={18}
+            color={colors.primary}
+          />
+          <Text style={styles.item}>
+            Correo electrónico
+          </Text>
         </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => setShowPasswordModal(true)}
+      >
+        <View style={styles.rowLeft}>
+          <Ionicons
+            name="lock-closed-outline"
+            size={18}
+            color={colors.primary}
+          />
+          <Text style={styles.item}>
+            Cambiar contraseña
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  </>
+)}
 
         {/* PREFERENCIAS */}
         <Text style={styles.section}>
@@ -333,14 +331,16 @@ export default function SettingsScreen() {
         </View>
 
         {/* BOTÓN FINAL */}
-        <TouchableOpacity
-          style={styles.logout}
-          onPress={logout}
-        >
-          <Text style={styles.logoutText}>
-            CERRAR SESIÓN
-          </Text>
-        </TouchableOpacity>
+{user && (
+  <TouchableOpacity
+    style={styles.logout}
+    onPress={logout}
+  >
+    <Text style={styles.logoutText}>
+      CERRAR SESIÓN
+    </Text>
+  </TouchableOpacity>
+)}
       </ScrollView>
 
       {/* MODAL INFORMACIÓN */}
