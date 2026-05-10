@@ -37,7 +37,6 @@ export const loginRequest = async (
       );
     }
 
-    // GUARDAR TOKENS
     await AsyncStorage.setItem(
       "accessToken",
       data.access
