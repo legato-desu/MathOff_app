@@ -4,16 +4,8 @@ from datetime import timedelta
 import dj_database_url
 import os
 
-# ======================================================
-# BASE DIR
-# ======================================================
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# ======================================================
-# SECURITY
-# ======================================================
 
 SECRET_KEY = config("SECRET_KEY")
 
@@ -24,11 +16,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
-
-
-# ======================================================
-# APPLICATIONS
-# ======================================================
 
 INSTALLED_APPS = [
     # Django base
@@ -54,10 +41,6 @@ INSTALLED_APPS = [
 ]
 
 
-# ======================================================
-# MIDDLEWARE
-# ======================================================
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
@@ -76,18 +59,10 @@ MIDDLEWARE = [
 ]
 
 
-# ======================================================
-# URLS / WSGI
-# ======================================================
-
 ROOT_URLCONF = "config.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# ======================================================
-# TEMPLATES
-# ======================================================
 
 TEMPLATES = [
     {
@@ -105,10 +80,6 @@ TEMPLATES = [
 ]
 
 
-# ======================================================
-# DATABASE (Render PostgreSQL)
-# ======================================================
-
 DATABASES = {
     "default": dj_database_url.parse(
         config("DATABASE_URL")
@@ -116,17 +87,8 @@ DATABASES = {
 }
 
 
-# ======================================================
-# CUSTOM USER MODEL
-# IMPORTANTE: debe ir antes de migraciones
-# ======================================================
-
 AUTH_USER_MODEL = "users.User"
 
-
-# ======================================================
-# DJANGO REST FRAMEWORK + JWT
-# ======================================================
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -139,17 +101,8 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-
-# ======================================================
-# CORS (Expo / React Native)
-# ======================================================
-
 CORS_ALLOW_ALL_ORIGINS = True
 
-
-# ======================================================
-# PASSWORD VALIDATION
-# ======================================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -166,11 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# ======================================================
-# INTERNATIONALIZATION
-# ======================================================
-
 LANGUAGE_CODE = "es-co"
 
 TIME_ZONE = "America/Bogota"
@@ -179,17 +127,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# ======================================================
-# STATIC FILES (Render)
-# ======================================================
-
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-
-# ======================================================
-# DEFAULT AUTO FIELD
-# ======================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
