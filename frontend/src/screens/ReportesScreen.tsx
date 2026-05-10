@@ -8,13 +8,15 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert,
-  TextInput,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useTheme } from "../theme/ThemeContext";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ReportesScreen() {
 
@@ -23,22 +25,34 @@ export default function ReportesScreen() {
   const [ejercicios, setEjercicios] =
     useState<any[]>([]);
 
-  const [editandoId, setEditandoId] =
-    useState<number | null>(null);
+  const [showModal, setShowModal] =
+    useState(false);
 
-  const [titulo, setTitulo] =
+  const [modalMessage, setModalMessage] =
     useState("");
 
-  const [descripcion, setDescripcion] =
-    useState("");
-
-  const [funcionCorrecta,
-    setFuncionCorrecta] =
-    useState("");
+  const [modalType, setModalType] =
+    useState<"success" | "error">("success");
 
   useEffect(() => {
     cargar();
   }, []);
+
+  const openSuccessModal = (
+    message: string
+  ) => {
+    setModalMessage(message);
+    setModalType("success");
+    setShowModal(true);
+  };
+
+  const openErrorModal = (
+    message: string
+  ) => {
+    setModalMessage(message);
+    setModalType("error");
+    setShowModal(true);
+  };
 
   const cargar = async () => {
 
@@ -65,11 +79,11 @@ export default function ReportesScreen() {
         setEjercicios(data);
       }
 
-    } catch (error) {
+    } catch (error: any) {
 
-      console.log(
-        "ERROR REPORTES:",
-        error
+      openErrorModal(
+        error.message ||
+        "Error cargando reportes"
       );
     }
   };
@@ -97,94 +111,27 @@ export default function ReportesScreen() {
         }
       );
 
-      if (response.ok) {
-
-        Alert.alert(
-          "Éxito",
-          "Ejercicio eliminado"
-        );
-
-        setEjercicios((prev) =>
-          prev.filter(
-            (e) => e.id !== id
-          )
+      if (!response.ok) {
+        throw new Error(
+          "No se pudo eliminar"
         );
       }
 
-    } catch (error) {
-
-      console.log(
-        "ERROR DELETE:",
-        error
-      );
-    }
-  };
-
-  const editarEjercicio = (
-    item: any
-  ) => {
-
-    setEditandoId(item.id);
-
-    setTitulo(item.titulo);
-
-    setDescripcion(
-      item.descripcion
-    );
-
-    setFuncionCorrecta(
-      item.funcion_correcta
-    );
-  };
-
-  const guardarCambios = async () => {
-
-    try {
-
-      const token =
-        await AsyncStorage.getItem(
-          "accessToken"
-        );
-
-      const response = await fetch(
-        `https://mathoff-app.onrender.com/api/ejercicios/${editandoId}/`,
-        {
-          method: "PUT",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-
-            Authorization:
-              `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({
-            titulo,
-            descripcion,
-            funcion_correcta:
-              funcionCorrecta,
-          }),
-        }
+      openSuccessModal(
+        "Ejercicio eliminado"
       );
 
-      if (response.ok) {
+      setEjercicios((prev) =>
+        prev.filter(
+          (e) => e.id !== id
+        )
+      );
 
-        Alert.alert(
-          "Éxito",
-          "Ejercicio actualizado"
-        );
+    } catch (error: any) {
 
-        setEditandoId(null);
-
-        cargar();
-      }
-
-    } catch (error) {
-
-      console.log(
-        "ERROR UPDATE:",
-        error
+      openErrorModal(
+        error.message ||
+        "Error eliminando ejercicio"
       );
     }
   };
@@ -198,102 +145,17 @@ export default function ReportesScreen() {
         padding: 20,
       }}
     >
+
       <Text
         style={{
           color: colors.text,
-          fontSize: 24,
+          fontSize: 26,
           fontWeight: "bold",
           marginBottom: 20,
         }}
       >
-        Reportes / Ejercicios
+        Reportes Generales
       </Text>
-
-      {editandoId && (
-
-        <View
-          style={{
-            backgroundColor:
-              colors.card,
-
-            padding: 15,
-
-            borderRadius: 12,
-
-            marginBottom: 20,
-          }}
-        >
-
-          <TextInput
-            value={titulo}
-            onChangeText={setTitulo}
-            placeholder="Título"
-            style={{
-              borderWidth: 1,
-              padding: 12,
-              marginBottom: 10,
-              borderRadius: 10,
-              color: colors.text,
-            }}
-          />
-
-          <TextInput
-            value={descripcion}
-            onChangeText={
-              setDescripcion
-            }
-            placeholder="Descripción"
-            style={{
-              borderWidth: 1,
-              padding: 12,
-              marginBottom: 10,
-              borderRadius: 10,
-              color: colors.text,
-            }}
-          />
-
-          <TextInput
-            value={funcionCorrecta}
-            onChangeText={
-              setFuncionCorrecta
-            }
-            placeholder="Función"
-            style={{
-              borderWidth: 1,
-              padding: 12,
-              marginBottom: 10,
-              borderRadius: 10,
-              color: colors.text,
-            }}
-          />
-
-          <TouchableOpacity
-            onPress={
-              guardarCambios
-            }
-            style={{
-              backgroundColor:
-                colors.primary,
-
-              padding: 14,
-
-              borderRadius: 10,
-
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              Guardar Cambios
-            </Text>
-          </TouchableOpacity>
-
-        </View>
-      )}
 
       {ejercicios.map((e) => (
 
@@ -301,13 +163,18 @@ export default function ReportesScreen() {
           key={e.id}
           style={{
             backgroundColor:
-              colors.card,
+              colors.surface,
 
-            padding: 15,
+            padding: 16,
 
-            borderRadius: 12,
+            borderRadius: 16,
 
-            marginBottom: 15,
+            marginBottom: 16,
+
+            borderWidth: 1,
+
+            borderColor:
+              colors.border,
           }}
         >
 
@@ -325,7 +192,8 @@ export default function ReportesScreen() {
             style={{
               color:
                 colors.textSecondary,
-              marginTop: 5,
+
+              marginTop: 8,
             }}
           >
             {e.descripcion}
@@ -333,17 +201,19 @@ export default function ReportesScreen() {
 
           <TouchableOpacity
             onPress={() =>
-              editarEjercicio(e)
+              eliminarEjercicio(
+                e.id
+              )
             }
             style={{
               backgroundColor:
-                colors.primary,
+                colors.error,
 
-              padding: 12,
+              padding: 13,
 
-              borderRadius: 10,
+              borderRadius: 12,
 
-              marginTop: 12,
+              marginTop: 15,
 
               alignItems: "center",
             }}
@@ -354,39 +224,140 @@ export default function ReportesScreen() {
                 fontWeight: "bold",
               }}
             >
-              Editar
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              eliminarEjercicio(e.id)
-            }
-            style={{
-              backgroundColor:
-                "#ef4444",
-
-              padding: 12,
-
-              borderRadius: 10,
-
-              marginTop: 10,
-
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-            >
-              Eliminar
+              Eliminar Ejercicio
             </Text>
           </TouchableOpacity>
 
         </View>
       ))}
+
+      <Modal
+        visible={showModal}
+        transparent
+        animationType="fade"
+      >
+        <TouchableWithoutFeedback
+          onPress={() =>
+            setShowModal(false)
+          }
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor:
+                "rgba(0,0,0,0.6)",
+
+              justifyContent:
+                "center",
+
+              alignItems: "center",
+
+              padding: 20,
+            }}
+          >
+            <TouchableWithoutFeedback>
+
+              <View
+                style={{
+                  width: "90%",
+
+                  backgroundColor:
+                    colors.card,
+
+                  borderRadius: 20,
+
+                  padding: 25,
+
+                  alignItems: "center",
+                }}
+              >
+
+                <Ionicons
+                  name={
+                    modalType === "success"
+                      ? "checkmark-circle"
+                      : "alert-circle"
+                  }
+                  size={65}
+                  color={
+                    modalType === "success"
+                      ? colors.success
+                      : colors.error
+                  }
+                />
+
+                <Text
+                  style={{
+                    color: colors.text,
+
+                    fontSize: 22,
+
+                    fontWeight: "bold",
+
+                    marginTop: 15,
+                  }}
+                >
+                  {modalType === "success"
+                    ? "Éxito"
+                    : "Error"}
+                </Text>
+
+                <Text
+                  style={{
+                    color:
+                      colors.textSecondary,
+
+                    textAlign: "center",
+
+                    marginTop: 12,
+
+                    fontSize: 16,
+
+                    lineHeight: 22,
+                  }}
+                >
+                  {modalMessage}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    setShowModal(false)
+                  }
+                  style={{
+                    marginTop: 25,
+
+                    backgroundColor:
+                      modalType === "success"
+                        ? colors.success
+                        : colors.primary,
+
+                    paddingVertical: 12,
+
+                    paddingHorizontal: 40,
+
+                    borderRadius: 12,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+
+                      fontWeight: "bold",
+
+                      fontSize: 16,
+                    }}
+                  >
+                    Entendido
+                  </Text>
+                </TouchableOpacity>
+
+              </View>
+
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
     </ScrollView>
   );
 }
