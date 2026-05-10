@@ -1,15 +1,17 @@
 from rest_framework import serializers
-
 from .models import User
-
 from roles.models import Role
 
-
-# REGISTER
 class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
         write_only=True
+    )
+
+    role = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        required=False,
+        allow_null=True
     )
 
     class Meta:
@@ -26,6 +28,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
+        role = validated_data.get(
+            "role",
+            None
+        )
+
         user = User.objects.create_user(
             username=validated_data["username"],
 
@@ -33,19 +40,19 @@ class RegisterSerializer(serializers.ModelSerializer):
 
             password=validated_data["password"],
 
-            role=validated_data.get("role")
+            role=role
         )
 
         return user
 
-
-# USERS CRUD
 class UserListSerializer(
     serializers.ModelSerializer
 ):
 
     role = serializers.PrimaryKeyRelatedField(
-        queryset=Role.objects.all()
+        queryset=Role.objects.all(),
+        required=False,
+        allow_null=True
     )
 
     class Meta:
@@ -60,8 +67,6 @@ class UserListSerializer(
             "is_staff",
         ]
 
-
-# ROLES CRUD
 class RoleSerializer(
     serializers.ModelSerializer
 ):
