@@ -1,17 +1,14 @@
-from rest_framework.routers import (
-    DefaultRouter
-)
+from rest_framework.routers import DefaultRouter
 
-from .views import (
-    EjercicioViewSet
-)
+from .views import EjercicioViewSet
+
 
 router = DefaultRouter()
 
 router.register(
-    r"",
+    r'',
     EjercicioViewSet,
-    basename="ejercicios"
+    basename='ejercicios'
 )
 
 urlpatterns = router.urls
