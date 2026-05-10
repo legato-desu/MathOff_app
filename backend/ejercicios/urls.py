@@ -1,7 +1,17 @@
-from django.urls import path
-from .views import CrearEjercicioView, ListarEjerciciosView
+from rest_framework.routers import (
+    DefaultRouter
+)
 
-urlpatterns = [
-    path("", ListarEjerciciosView.as_view(), name="listar_ejercicios"),
-    path("crear/", CrearEjercicioView.as_view(), name="crear_ejercicio"),
-]
+from .views import (
+    EjercicioViewSet
+)
+
+router = DefaultRouter()
+
+router.register(
+    r"",
+    EjercicioViewSet,
+    basename="ejercicios"
+)
+
+urlpatterns = router.urls

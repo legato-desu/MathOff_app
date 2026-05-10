@@ -48,7 +48,7 @@ export default function EstudianteDashboard() {
 
       Alert.alert(
         "Error",
-        "No se pudieron cargar ejercicios"
+        "No se pudieron cargar los ejercicios"
       );
     }
   };

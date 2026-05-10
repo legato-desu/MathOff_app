@@ -1,28 +1,37 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+
+from rest_framework.permissions import (
+    IsAuthenticated,
+)
 
 from .models import Ejercicio
-from .serializers import EjercicioSerializer
+
+from .serializers import (
+    EjercicioSerializer,
+)
 
 
-class CrearEjercicioView(APIView):
-    permission_classes = [IsAuthenticated]
+class EjercicioViewSet(
+    viewsets.ModelViewSet
+):
 
-    def post(self, request):
-        serializer = EjercicioSerializer(data=request.data)
+    queryset = Ejercicio.objects.all().order_by(
+        "-id"
+    )
 
-        if serializer.is_valid():
-            serializer.save(creado_por=request.user)
-            return Response(serializer.data, status=201)
+    serializer_class = (
+        EjercicioSerializer
+    )
 
-        return Response(serializer.errors, status=400)
+    permission_classes = [
+        IsAuthenticated
+    ]
 
+    def perform_create(
+        self,
+        serializer
+    ):
 
-class ListarEjerciciosView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        ejercicios = Ejercicio.objects.all().order_by("-id")
-        serializer = EjercicioSerializer(ejercicios, many=True)
-        return Response(serializer.data)
+        serializer.save(
+            creado_por=self.request.user
+        )
