@@ -37,7 +37,6 @@ export const loginRequest = async (
       );
     }
 
-    // GUARDAR TOKENS
     await AsyncStorage.setItem(
       "accessToken",
       data.access
@@ -203,7 +202,7 @@ export const registerRequest = async (
   try {
 
     const response = await fetch(
-      `${API_URL}/users/register/`,
+      `${API_URL}/register/`,
       {
         method: "POST",
 
