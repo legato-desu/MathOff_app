@@ -82,4 +82,28 @@ export const learningData: any = {
     tips:
       "Piensa en la derivada como velocidad y la integral como acumulación.",
   },
+
+  comandos: {
+    title: "Guía de comandos",
+
+    image: require("../../assets/lineal.png"),
+
+    theory:
+      "Esta guía explica cómo escribir correctamente las funciones matemáticas usando el teclado del graficador.",
+
+    formula:
+      "x² → x^2 | √x → sqrt(x) | seno → sin(x)",
+
+    explanation:
+      "Debes escribir las funciones usando símbolos especiales del teclado. Algunas operaciones necesitan paréntesis para funcionar correctamente.",
+
+    example:
+      "Ejemplos:\n\nx^2 → x al cuadrado\nx^3 → x al cubo\nsin(x) → función seno\ncos(x) → función coseno\ntan(x) → función tangente\nsqrt(x) → raíz cuadrada\n(x+1)^2 → binomio al cuadrado",
+
+    realLife:
+      "Estas expresiones permiten representar funciones usadas en matemáticas, física e ingeniería.",
+
+    tips:
+      "• Usa ^ para potencias\n• Usa √ para raíces\n• Usa paréntesis en funciones\n• Multiplica con * si es necesario\n• Escribe sin(x), cos(x) y tan(x)\n• Usa puntos para decimales\n• Usa π para trabajar con pi",
+  },
 };

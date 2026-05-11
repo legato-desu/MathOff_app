@@ -111,6 +111,21 @@ export default function LearnDetailScreen() {
         />
       )}
 
+      {type === "comandos" && (
+        <Image
+          source={require("../../assets/comandos.png")}
+          style={{
+            width: "100%",
+            height: 200,
+            marginTop: 15,
+            borderRadius: 12
+          }}
+          resizeMode="cover"
+        />
+      )}
+
+      {}
+
       <Text style={{ marginTop: 15, color: colors.text }}>
         {data.theory}
       </Text>

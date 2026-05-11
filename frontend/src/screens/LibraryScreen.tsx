@@ -60,6 +60,13 @@ export default function LibraryScreen() {
       desc: "Límites, derivadas e integrales",
       icon: "calculator-outline",
       type: "calculo"
+    },
+
+    {
+      title: "Guía de comandos",
+      desc: "Cómo escribir funciones en el teclado",
+      icon: "book-outline",
+      type: "comandos"
     }
   ];
 
