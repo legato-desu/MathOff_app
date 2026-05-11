@@ -125,7 +125,7 @@ Usuario inicia sesión
 → Zustand almacena sesión
 → AsyncStorage persiste datos
 → Navegación protegida habilitada
-
+```
 ---
 
 # 🔄 Persistencia de sesión
@@ -307,5 +307,5 @@ password: 1234
 ## 👨‍💻 Autores
 
 Desarrollado por
-* **Ivan Miranda**
-* **Andres Granja**
+* **Ivan David Miranda Castro**
+* **Andres Julian Granja Andrade**
