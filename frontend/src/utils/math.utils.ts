@@ -7,7 +7,8 @@ export const parseExpression = (expr: string): string => {
     .replace(/sin/g, "Math.sin")
     .replace(/cos/g, "Math.cos")
     .replace(/tan/g, "Math.tan")
-    .replace(/√/g, "Math.sqrt")
+    .replace(/√\(([^)]+)\)/g, "Math.sqrt($1)")
+    .replace(/√([a-zA-Z0-9]+)/g, "Math.sqrt($1)")
     .replace(/ln/g, "Math.log")
     .replace(/log/g, "Math.log10")
     .replace(/exp/g, "Math.exp");
