@@ -66,35 +66,38 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12
+            borderRadius: 12,
+            alignSelf: "center"
           }}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
 
       {type === "cuadratica" && (
         <Image
-          source={require("../../assets/cuadratica.png")}
+          source={require("../../assets/cuadratica.jpg")}
           style={{
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12
+            borderRadius: 12,
+            alignSelf: "center"
           }}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
 
       {type === "trigonometria" && (
         <Image
-          source={require("../../assets/seno.png")}
+          source={require("../../assets/seno.jpg")}
           style={{
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12
+            borderRadius: 12,
+            alignSelf: "center"
           }}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
 
@@ -105,9 +108,10 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12
+            borderRadius: 12,
+            alignSelf: "center"
           }}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
 
@@ -118,9 +122,10 @@ export default function LearnDetailScreen() {
             width: "100%",
             height: 200,
             marginTop: 15,
-            borderRadius: 12
+            borderRadius: 12,
+            alignSelf: "center"
           }}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
 
