@@ -60,29 +60,68 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async () => {
+
     if (!username || !password) {
-      openErrorModal("Completa todos los campos");
+
+      openErrorModal(
+        "Completa todos los campos"
+      );
+
       return;
     }
 
     try {
-      const data = await loginRequest(username, password);
 
-      login(data.token, data.user);
+      const data =
+        await loginRequest(
+          username,
+          password
+        );
+
+      console.log(
+        "LOGIN DATA:",
+        data
+      );
+
+      await AsyncStorage.setItem(
+        "accessToken",
+        data.token
+      );
+
+      await AsyncStorage.setItem(
+        "refreshToken",
+        data.refresh
+      );
+
+      login(
+        data.token,
+        data.user
+      );
 
       if (remember) {
+
         await AsyncStorage.setItem(
           "username",
           username
         );
+
       } else {
-        await AsyncStorage.removeItem("username");
+
+        await AsyncStorage.removeItem(
+          "username"
+        );
       }
 
     } catch (error: any) {
+
+      console.log(
+        "ERROR LOGIN:",
+        error
+      );
+
       openErrorModal(
         error.message ||
-          "Error al iniciar sesión"
+        "Error al iniciar sesión"
       );
     }
   };
