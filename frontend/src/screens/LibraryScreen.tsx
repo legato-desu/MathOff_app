@@ -9,21 +9,13 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-
 import { useNavigation } from "@react-navigation/native";
-
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import SavedGraphCard from "../components/SavedGraphCard";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import { getStyles } from "../styles/library.styles";
-
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { useScanStore } from "../store/scanStore";
-
 import { useAuthStore } from "../store/authStore";
 
 type NavigationProp = NativeStackNavigationProp<any>;
@@ -31,19 +23,24 @@ type NavigationProp = NativeStackNavigationProp<any>;
 export default function LibraryScreen() {
 
   const { colors } = useTheme();
-
   const styles = getStyles(colors);
-
   const navigation = useNavigation<NavigationProp>();
-
   const user = useAuthStore((state) => state.user);
 
-  const images = useScanStore((state) =>
-    user?.user_id
-      ? state.getImages(user.user_id)
-      : []
-  );
+const imagesByUser = useScanStore(
+  (state) => state.imagesByUser
+);
+
+const images = user?.user_id
+  ? imagesByUser[user.user_id] || []
+  : [];
   const learningItems = [
+    {
+      title: "Guía de comandos",
+      desc: "Cómo escribir funciones en el teclado",
+      icon: "book-outline",
+      type: "comandos"
+    },
     {
       title: "Funciones lineales",
       desc: "Pendiente, intersecciones, y=mx+b",
@@ -68,13 +65,8 @@ export default function LibraryScreen() {
       icon: "calculator-outline",
       type: "calculo"
     },
+    
 
-    {
-      title: "Guía de comandos",
-      desc: "Cómo escribir funciones en el teclado",
-      icon: "book-outline",
-      type: "comandos"
-    }
   ];
 
   return (

@@ -14,9 +14,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RolesScreen() {
@@ -305,13 +303,9 @@ export default function RolesScreen() {
             colors.surface,
 
           borderRadius: 16,
-
           padding: 18,
-
           marginBottom: 25,
-
           borderWidth: 1,
-
           borderColor:
             colors.border,
         }}
@@ -327,18 +321,14 @@ export default function RolesScreen() {
           style={{
             backgroundColor:
               colors.card,
-
             color: colors.text,
-
             borderWidth: 1,
 
             borderColor:
               colors.border,
 
             padding: 14,
-
             borderRadius: 12,
-
             marginBottom: 12,
           }}
         />
@@ -356,20 +346,13 @@ export default function RolesScreen() {
           style={{
             backgroundColor:
               colors.card,
-
             color: colors.text,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
-
             padding: 14,
-
             borderRadius: 12,
-
             marginBottom: 15,
-
             minHeight: 90,
           }}
         />
@@ -385,9 +368,7 @@ export default function RolesScreen() {
               colors.primary,
 
             padding: 15,
-
             borderRadius: 12,
-
             alignItems: "center",
           }}
         >
@@ -413,15 +394,10 @@ export default function RolesScreen() {
           style={{
             backgroundColor:
               colors.surface,
-
             padding: 16,
-
             borderRadius: 16,
-
             marginBottom: 16,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
           }}
@@ -455,13 +431,9 @@ export default function RolesScreen() {
             style={{
               backgroundColor:
                 colors.button,
-
               padding: 13,
-
               borderRadius: 12,
-
               marginTop: 14,
-
               alignItems: "center",
             }}
           >
@@ -482,13 +454,9 @@ export default function RolesScreen() {
             style={{
               backgroundColor:
                 colors.error,
-
               padding: 13,
-
               borderRadius: 12,
-
               marginTop: 10,
-
               alignItems: "center",
             }}
           >
@@ -563,11 +531,8 @@ export default function RolesScreen() {
                 <Text
                   style={{
                     color: colors.text,
-
                     fontSize: 22,
-
                     fontWeight: "bold",
-
                     marginTop: 15,
                   }}
                 >
@@ -580,13 +545,9 @@ export default function RolesScreen() {
                   style={{
                     color:
                       colors.textSecondary,
-
                     textAlign: "center",
-
                     marginTop: 12,
-
                     fontSize: 16,
-
                     lineHeight: 22,
                   }}
                 >
@@ -606,9 +567,7 @@ export default function RolesScreen() {
                         : colors.primary,
 
                     paddingVertical: 12,
-
                     paddingHorizontal: 40,
-
                     borderRadius: 12,
                   }}
                 >

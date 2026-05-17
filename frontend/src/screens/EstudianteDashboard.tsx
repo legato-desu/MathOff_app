@@ -12,11 +12,8 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import CustomModal from "../components/CustomModal";
-
 export default function EstudianteDashboard() {
 
   const { colors } = useTheme();

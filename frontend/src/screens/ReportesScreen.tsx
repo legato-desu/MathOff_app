@@ -13,9 +13,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ReportesScreen() {
@@ -166,11 +164,8 @@ export default function ReportesScreen() {
               colors.surface,
 
             padding: 16,
-
             borderRadius: 16,
-
             marginBottom: 16,
-
             borderWidth: 1,
 
             borderColor:

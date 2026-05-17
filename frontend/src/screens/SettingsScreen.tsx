@@ -12,7 +12,6 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/settings.styles";
 import { useAuthStore } from "../store/authStore";
@@ -144,7 +143,6 @@ export default function SettingsScreen() {
           Opciones
         </Text>
 
-        {/* PERFIL */}
         <View style={styles.profileCard}>
           <View style={styles.profileLeft}>
             <View style={styles.avatar}>
@@ -178,7 +176,6 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* APP */}
         <Text style={styles.section}>
           APP
         </Text>
@@ -206,7 +203,6 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* CUENTA */}
 {user && (
   <>
     <Text style={styles.section}>CUENTA</Text>
@@ -247,7 +243,6 @@ export default function SettingsScreen() {
   </>
 )}
 
-        {/* PREFERENCIAS */}
         <Text style={styles.section}>
           PREFERENCIAS
         </Text>
@@ -330,7 +325,6 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* BOTÓN FINAL */}
 {user && (
   <TouchableOpacity
     style={styles.logout}
@@ -343,7 +337,6 @@ export default function SettingsScreen() {
 )}
       </ScrollView>
 
-      {/* MODAL INFORMACIÓN */}
       <Modal
         visible={showInfoModal}
         transparent
@@ -434,7 +427,6 @@ export default function SettingsScreen() {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* MODAL CAMBIAR PASSWORD */}
       <Modal
         visible={showPasswordModal}
         transparent

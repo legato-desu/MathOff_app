@@ -9,10 +9,6 @@ import RolesScreen from "../screens/RolesScreen";
 import ReportesScreen from "../screens/ReportesScreen";
 import { useAuthStore } from "../store/authStore";
 import RespuestasScreen from "../screens/RespuestasScreen";
-import {
-  View,
-  ActivityIndicator,
-} from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,11 +18,9 @@ export default function MainNavigator() {
     (state) => state.isAuthenticated
   );
 
-
   const user = useAuthStore(
     (state) => state.user
   );
-
 
   return (
 

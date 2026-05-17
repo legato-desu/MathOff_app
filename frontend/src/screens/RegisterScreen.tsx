@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   View,
   Text,
@@ -8,12 +7,9 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/login.styles";
-
 import { registerRequest } from "../servicios/api";
-
 import CustomModal from "../components/CustomModal";
 
 type Props = {

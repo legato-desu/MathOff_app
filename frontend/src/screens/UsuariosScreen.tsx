@@ -14,9 +14,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function UsuariosScreen() {
@@ -149,7 +147,6 @@ export default function UsuariosScreen() {
       );
 
       limpiarFormulario();
-
       cargarUsuarios();
 
     } catch (error: any) {
@@ -166,11 +163,8 @@ export default function UsuariosScreen() {
   ) => {
 
     setEditandoId(user.id);
-
     setUsername(user.username);
-
     setEmail(user.email);
-
     setRole(
       user.role?.toString() || ""
     );
@@ -217,7 +211,6 @@ export default function UsuariosScreen() {
       );
 
       limpiarFormulario();
-
       cargarUsuarios();
 
     } catch (error: any) {
@@ -280,11 +273,8 @@ export default function UsuariosScreen() {
   const limpiarFormulario = () => {
 
     setEditandoId(null);
-
     setUsername("");
-
     setEmail("");
-
     setRole("");
   };
 
@@ -313,15 +303,10 @@ export default function UsuariosScreen() {
         style={{
           backgroundColor:
             colors.surface,
-
           borderRadius: 16,
-
           padding: 18,
-
           marginBottom: 25,
-
           borderWidth: 1,
-
           borderColor:
             colors.border,
         }}
@@ -337,18 +322,12 @@ export default function UsuariosScreen() {
           style={{
             backgroundColor:
               colors.card,
-
             color: colors.text,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
-
             padding: 14,
-
             borderRadius: 12,
-
             marginBottom: 12,
           }}
         />
@@ -363,18 +342,12 @@ export default function UsuariosScreen() {
           style={{
             backgroundColor:
               colors.card,
-
             color: colors.text,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
-
             padding: 14,
-
             borderRadius: 12,
-
             marginBottom: 12,
           }}
         />
@@ -389,18 +362,12 @@ export default function UsuariosScreen() {
           style={{
             backgroundColor:
               colors.card,
-
             color: colors.text,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
-
             padding: 14,
-
             borderRadius: 12,
-
             marginBottom: 15,
           }}
         />
@@ -414,11 +381,8 @@ export default function UsuariosScreen() {
           style={{
             backgroundColor:
               colors.primary,
-
             padding: 15,
-
             borderRadius: 12,
-
             alignItems: "center",
           }}
         >
@@ -444,15 +408,10 @@ export default function UsuariosScreen() {
           style={{
             backgroundColor:
               colors.surface,
-
             padding: 16,
-
             borderRadius: 16,
-
             marginBottom: 16,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
           }}
@@ -498,13 +457,9 @@ export default function UsuariosScreen() {
             style={{
               backgroundColor:
                 colors.button,
-
               padding: 13,
-
               borderRadius: 12,
-
               marginTop: 14,
-
               alignItems: "center",
             }}
           >
@@ -527,13 +482,9 @@ export default function UsuariosScreen() {
             style={{
               backgroundColor:
                 colors.error,
-
               padding: 13,
-
               borderRadius: 12,
-
               marginTop: 10,
-
               alignItems: "center",
             }}
           >
@@ -565,12 +516,9 @@ export default function UsuariosScreen() {
               flex: 1,
               backgroundColor:
                 "rgba(0,0,0,0.6)",
-
               justifyContent:
                 "center",
-
               alignItems: "center",
-
               padding: 20,
             }}
           >
@@ -579,14 +527,10 @@ export default function UsuariosScreen() {
               <View
                 style={{
                   width: "90%",
-
                   backgroundColor:
                     colors.card,
-
                   borderRadius: 20,
-
                   padding: 25,
-
                   alignItems: "center",
                 }}
               >
@@ -608,11 +552,8 @@ export default function UsuariosScreen() {
                 <Text
                   style={{
                     color: colors.text,
-
                     fontSize: 22,
-
                     fontWeight: "bold",
-
                     marginTop: 15,
                   }}
                 >
@@ -625,13 +566,9 @@ export default function UsuariosScreen() {
                   style={{
                     color:
                       colors.textSecondary,
-
                     textAlign: "center",
-
                     marginTop: 12,
-
                     fontSize: 16,
-
                     lineHeight: 22,
                   }}
                 >
@@ -649,20 +586,15 @@ export default function UsuariosScreen() {
                       modalType === "success"
                         ? colors.success
                         : colors.primary,
-
                     paddingVertical: 12,
-
                     paddingHorizontal: 40,
-
                     borderRadius: 12,
                   }}
                 >
                   <Text
                     style={{
                       color: "#fff",
-
                       fontWeight: "bold",
-
                       fontSize: 16,
                     }}
                   >
