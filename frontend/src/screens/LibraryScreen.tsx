@@ -24,6 +24,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useScanStore } from "../store/scanStore";
 
+import { useAuthStore } from "../store/authStore";
+
 type NavigationProp = NativeStackNavigationProp<any>;
 
 export default function LibraryScreen() {
@@ -34,8 +36,13 @@ export default function LibraryScreen() {
 
   const navigation = useNavigation<NavigationProp>();
 
-  const images = useScanStore((state) => state.images);
+  const user = useAuthStore((state) => state.user);
 
+  const images = useScanStore((state) =>
+    user?.user_id
+      ? state.getImages(user.user_id)
+      : []
+  );
   const learningItems = [
     {
       title: "Funciones lineales",

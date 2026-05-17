@@ -29,6 +29,8 @@ export default function ScanScreen() {
 
   const addImage = useScanStore((state) => state.addImage);
 
+  const user = useAuthStore((state) => state.user);
+
   const [permission, requestPermission] = useCameraPermissions();
 
   const cameraRef = useRef<CameraView>(null);
@@ -65,8 +67,9 @@ export default function ScanScreen() {
 
           setPhotoUri(photo.uri);
 
-          // ✅ Guardar en historial
-          addImage(photo.uri);
+          if (user?.user_id) {
+            addImage(user.user_id, photo.uri);
+}
         }
 
       } catch (e) {
