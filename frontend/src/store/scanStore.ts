@@ -6,21 +6,70 @@ interface ScanImage {
 }
 
 interface ScanStore {
-  images: ScanImage[];
-  addImage: (uri: string) => void;
+
+  imagesByUser: {
+    [userId: number]: ScanImage[];
+  };
+
+  addImage: (
+    userId: number,
+    uri: string
+  ) => void;
+
+  getImages: (
+    userId: number
+  ) => ScanImage[];
+
+  clearImages: (
+    userId: number
+  ) => void;
 }
 
-export const useScanStore = create<ScanStore>((set) => ({
-  images: [],
+export const useScanStore = create<ScanStore>(
+  (set, get) => ({
 
-  addImage: (uri) =>
-    set((state) => ({
-      images: [
-        {
-          id: Date.now().toString(),
-          uri,
+    imagesByUser: {},
+
+    addImage: (
+      userId,
+      uri
+    ) =>
+
+      set((state) => ({
+
+        imagesByUser: {
+
+          ...state.imagesByUser,
+
+          [userId]: [
+
+            {
+              id: Date.now().toString(),
+              uri,
+            },
+
+            ...(state.imagesByUser[userId] || []),
+          ],
         },
-        ...state.images,
-      ],
-    })),
-}));
+      })),
+
+    getImages: (userId) => {
+
+      return (
+        get().imagesByUser[userId] || []
+      );
+    },
+
+    clearImages: (userId) =>
+
+      set((state) => ({
+
+        imagesByUser: {
+
+          ...state.imagesByUser,
+
+          [userId]: [],
+        },
+      })),
+  })
+);

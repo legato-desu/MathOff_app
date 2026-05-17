@@ -24,3 +24,9 @@ class Respuesta(models.Model):
 
     def __str__(self):
         return f"{self.estudiante.username} - {self.ejercicio.titulo}"
+    
+    class Meta:
+        unique_together = (
+            "estudiante",
+            "ejercicio"
+        )
