@@ -17,11 +17,8 @@ interface UserData {
 interface AuthState {
 
   token: string | null;
-
   user: UserData | null;
-
   isAuthenticated: boolean;
-
   showLogin: boolean;
 
   login: (
@@ -30,9 +27,7 @@ interface AuthState {
   ) => void;
 
   logout: () => Promise<void>;
-
   openLogin: () => void;
-
   closeLogin: () => void;
 }
 

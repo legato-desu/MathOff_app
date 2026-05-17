@@ -11,11 +11,8 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { useTheme } from "../theme/ThemeContext";
-
 import { useNavigation } from "@react-navigation/native";
-
 import CustomModal from "../components/CustomModal";
 
 export default function ProfesorDashboard() {

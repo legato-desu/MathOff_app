@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { useAuthStore } from "../store/authStore";
 
 const API_URL = "https://mathoff-app.onrender.com/api";
@@ -64,7 +63,6 @@ export const loginRequest = async (
   } catch (error: any) {
 
     console.log("ERROR LOGIN:", error);
-
     throw new Error(error.message);
   }
 };
@@ -113,7 +111,6 @@ export const refreshAccessToken = async () => {
   } catch (error) {
 
     console.log("ERROR REFRESH TOKEN:", error);
-
     return null;
   }
 };
@@ -232,7 +229,6 @@ export const registerRequest = async (
   } catch (error: any) {
 
     console.log("ERROR REGISTER:", error);
-
     throw new Error(error.message);
   }
 };

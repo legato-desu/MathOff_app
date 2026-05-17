@@ -1,52 +1,76 @@
-export const parseExpression = (expr: string): string => {
+import { compile } from "mathjs";
+
+export const parseExpression = (
+  expr: string
+): string => {
+
   let parsed = expr;
 
-  parsed = parsed.replace(/π/g, "Math.PI");
+  parsed = parsed
+    .replace(/π/g, "pi")
+    .replace(/ln/g, "log")
+    .replace(/√/g, "sqrt")
+    .replace(/\^/g, "^");
 
   parsed = parsed
-    .replace(/sin/g, "Math.sin")
-    .replace(/cos/g, "Math.cos")
-    .replace(/tan/g, "Math.tan")
-    .replace(/√\(([^)]+)\)/g, "Math.sqrt($1)")
-    .replace(/√([a-zA-Z0-9]+)/g, "Math.sqrt($1)")
-    .replace(/ln/g, "Math.log")
-    .replace(/log/g, "Math.log10")
-    .replace(/exp/g, "Math.exp");
-
-  // ⚡ potencias
-  parsed = parsed.replace(/\^/g, "**");
-
-  parsed = parsed
-    .replace(/(\d)(x)/g, "$1*$2")
-    .replace(/(\d)(Math\.)/g, "$1*$2")
-    .replace(/(\))(Math\.)/g, "$1*$2")
+    .replace(/(\d)(x)/g, "$1*x")
     .replace(/(\d)\(/g, "$1*(")
-    .replace(/(\))(x)/g, "$1*$2");
+    .replace(/(\))(x)/g, "$1*x");
 
   return parsed;
 };
 
 export const evaluateExpression = (
   expr: string
-): { fn: ((x: number) => number) | null; error: string | null } => {
+): {
+  fn: ((x: number) => number) | null;
+  error: string | null;
+} => {
+
   try {
+
     if (!expr.trim()) {
-      return { fn: null, error: "Escribe una función" };
+
+      return {
+        fn: null,
+        error: "Escribe una función"
+      };
     }
 
-    const parsed = parseExpression(expr);
+    const parsed =
+      parseExpression(expr);
 
-    const fn = new Function("x", `return ${parsed}`) as (x: number) => number;
+    const compiled =
+      compile(parsed);
 
-    const test = fn(1);
+    const fn = (x: number) => {
 
-    if (typeof test !== "number" || isNaN(test)) {
-      throw new Error("Resultado inválido");
-    }
+      const result =
+        compiled.evaluate({ x });
 
-    return { fn, error: null };
+      if (
+        typeof result !== "number" ||
+        isNaN(result)
+      ) {
 
-  } catch (error) {
-    return { fn: null, error: "Expresión inválida" };
+        throw new Error();
+      }
+
+      return result;
+    };
+
+    fn(1);
+
+    return {
+      fn,
+      error: null
+    };
+
+  } catch {
+
+    return {
+      fn: null,
+      error: "Expresión inválida"
+    };
   }
 };

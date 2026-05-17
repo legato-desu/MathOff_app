@@ -10,7 +10,6 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { useTheme } from "../theme/ThemeContext";
 
 export default function RespuestasScreen() {
@@ -87,13 +86,9 @@ export default function RespuestasScreen() {
               colors.card,
 
             padding: 15,
-
             borderRadius: 12,
-
             marginBottom: 15,
-
             borderWidth: 1,
-
             borderColor:
               colors.border,
           }}

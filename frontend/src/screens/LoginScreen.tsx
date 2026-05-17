@@ -14,13 +14,10 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/login.styles";
-
 import { loginRequest } from "../servicios/api";
 import { useAuthStore } from "../store/authStore";
-
 import RegisterScreen from "./RegisterScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 

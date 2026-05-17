@@ -8,33 +8,22 @@ import {
 } from "react-native";
 
 import { CameraView, useCameraPermissions } from "expo-camera";
-
 import { useTheme } from "../theme/ThemeContext";
 import { createStyles } from "../styles/graph.styles";
-
 import { useAuthStore } from "../store/authStore";
 import { useScanStore } from "../store/scanStore";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ScanScreen() {
 
   const { colors } = useTheme();
-
   const styles = createStyles(colors);
-
   const token = useAuthStore((state) => state.token);
-
   const openLogin = useAuthStore((state) => state.openLogin);
-
   const addImage = useScanStore((state) => state.addImage);
-
   const user = useAuthStore((state) => state.user);
-
   const [permission, requestPermission] = useCameraPermissions();
-
   const cameraRef = useRef<CameraView>(null);
-
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,13 +49,9 @@ export default function ScanScreen() {
       try {
 
         const photo = await cameraRef.current.takePictureAsync();
-
         if (photo?.uri) {
-
           console.log("Foto tomada:", photo.uri);
-
           setPhotoUri(photo.uri);
-
           if (user?.user_id) {
             addImage(user.user_id, photo.uri);
 }
@@ -80,7 +65,6 @@ export default function ScanScreen() {
     }
   };
 
-  // 🔒 SIN LOGIN
   if (!token) {
 
     return (
@@ -128,7 +112,6 @@ export default function ScanScreen() {
     );
   }
 
-  // 📷 PREVIEW FOTO
   if (photoUri) {
 
     return (
@@ -156,7 +139,6 @@ export default function ScanScreen() {
           }}
         >
 
-          {/* ❌ CANCELAR */}
           <TouchableOpacity
             onPress={() => setPhotoUri(null)}
             style={{
@@ -177,13 +159,10 @@ export default function ScanScreen() {
 
           </TouchableOpacity>
 
-          {/* ✅ ENVIAR */}
           <TouchableOpacity
             onPress={() => {
 
               console.log("Enviar foto:", photoUri);
-
-              // 👉 Aquí puedes enviarla al backend
 
               setPhotoUri(null);
             }}
@@ -211,7 +190,6 @@ export default function ScanScreen() {
     );
   }
 
-  // ⏳ CARGANDO PERMISOS
   if (!permission) {
 
     return (
@@ -234,7 +212,6 @@ export default function ScanScreen() {
     );
   }
 
-  // ❌ SIN PERMISOS
   if (!permission.granted) {
 
     return (
@@ -257,7 +234,6 @@ export default function ScanScreen() {
     );
   }
 
-  // ✅ CÁMARA
   return (
 
     <SafeAreaView

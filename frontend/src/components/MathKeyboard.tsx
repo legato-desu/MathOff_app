@@ -12,11 +12,12 @@ type Props = {
 
 const keys = [
   ["C","⌫"],
-  ["sin","cos","tan","π","√"],
+  ["sin(","cos(","tan(","log(","ln("],
+  ["π","√(","e","^","/"],
   ["x","7","8","9","+"],
   ["y","4","5","6","*"],
-  ["^","1","2","3","-"],
-  ["("," )","0",".","="]
+  ["("," )","1","2","3"],
+  ["0",".","-","="]
 ];
 
 export default function MathKeyboard({ onInput, onDelete, onClear }: Props) {
