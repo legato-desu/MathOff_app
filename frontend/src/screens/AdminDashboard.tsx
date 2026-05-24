@@ -23,7 +23,6 @@ export default function AdminDashboard() {
         Panel de Administrador
       </Text>
 
-      {/* Usuarios */}
       <View
         style={{
           backgroundColor: colors.card,
