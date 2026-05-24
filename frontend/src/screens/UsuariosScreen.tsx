@@ -5,6 +5,7 @@ import React, {
 
 import {
   View,
+  
   Text,
   ScrollView,
   TouchableOpacity,
