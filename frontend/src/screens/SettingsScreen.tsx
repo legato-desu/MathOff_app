@@ -164,7 +164,7 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          <TouchableOpacity
+          {/*<TouchableOpacity
             onPress={logout}
             style={{ padding: 8 }}
           >
@@ -172,8 +172,8 @@ export default function SettingsScreen() {
               name="log-out-outline"
               size={22}
               color={colors.primary}
-            />
-          </TouchableOpacity>
+            />*
+          </TouchableOpacity>*/}
         </View>
 
         <Text style={styles.section}>
